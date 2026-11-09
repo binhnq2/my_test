@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Mass-storage devices only: the receiver is informational, the real
+         media discovery path is MediaStore + StorageManager volumes. -->
+    <usb-device class="8" subclass="6" />
+</resources>

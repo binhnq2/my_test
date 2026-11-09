@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TS8 Launcher</string>
+
+    <!-- Bottom navigation -->
+    <string name="nav_home">Trang chủ</string>
+    <string name="nav_map">Bản đồ</string>
+    <string name="nav_music">Âm nhạc</string>
+    <string name="nav_phone">Điện thoại</string>
+    <string name="nav_apps">Ứng dụng</string>
+
+    <!-- Home -->
+    <string name="home_speed_unit">km/h</string>
+    <string name="home_music_empty">Chưa phát nhạc</string>
+    <string name="home_music_hint">Mở Âm nhạc để chọn bài</string>
+    <string name="home_gps_searching">Đang tìm tín hiệu GPS</string>
+    <string name="home_map_unavailable">Bản đồ chưa sẵn sàng</string>
+    <string name="home_zoom_in">Phóng to</string>
+    <string name="home_zoom_out">Thu nhỏ</string>
+    <string name="home_recenter">Về vị trí xe</string>
+    <string name="home_layers">Lớp bản đồ</string>
+    <string name="home_speed_limit_none">Chưa có dữ liệu giới hạn tốc độ</string>
+
+    <!-- Search -->
+    <string name="search_hint">Tìm kiếm địa điểm, địa chỉ…</string>
+    <string name="search_empty_prompt">Nhập tên địa điểm để tìm</string>
+    <string name="search_no_results">Không tìm thấy kết quả</string>
+    <string name="search_route">Lộ trình</string>
+    <string name="search_save">Lưu</string>
+    <string name="search_km">km</string>
+    <string name="search_minute">phút</string>
+    <string name="search_close">Đóng tìm kiếm</string>
+    <string name="search_clear">Xoá nội dung</string>
+    <string name="search_loading">Đang tìm…</string>
+    <string name="search_unavailable">Chưa có dữ liệu địa điểm. Kiểm tra map pack.</string>
+    <string name="search_result_count">%1$d kết quả</string>
+    <string name="search_open_map">Mở bản đồ</string>
+    <string name="search_pick_on_map">Chọn trên bản đồ</string>
+    <string name="search_select_hint">Chọn một kết quả để xem chi tiết</string>
+    <string name="search_results_label">Kết quả</string>
+    <string name="search_saved_label">Địa điểm đã lưu</string>
+    <string name="search_no_saved">Chưa lưu địa điểm nào. Nhập tên để tìm.</string>
+    <string name="search_distance_away">Cách %1$s</string>
+    <string name="search_saved">Đã lưu</string>
+    <string name="search_unsave">Bỏ lưu</string>
+    <string name="search_cat_poi">Địa điểm</string>
+    <string name="search_cat_street">Đường</string>
+    <string name="search_cat_place">Khu vực</string>
+    <string name="search_cat_address">Địa chỉ</string>
+
+    <!-- Music -->
+    <string name="music_play">Phát</string>
+    <string name="music_pause">Tạm dừng</string>
+    <string name="music_next">Bài tiếp</string>
+    <string name="music_previous">Bài trước</string>
+    <string name="music_shuffle">Ngẫu nhiên</string>
+    <string name="music_repeat">Lặp lại</string>
+    <string name="music_repeat_one">Lặp một bài</string>
+    <string name="music_favorite">Yêu thích</string>
+    <string name="music_tab_playlist">Danh sách phát</string>
+    <string name="music_tab_songs">Bài hát</string>
+    <string name="music_tab_albums">Album</string>
+    <string name="music_tab_artists">Nghệ sĩ</string>
+    <string name="music_empty">Chưa có bài hát nào</string>
+    <string name="music_empty_hint">Cắm USB hoặc chép nhạc vào bộ nhớ trong</string>
+    <string name="music_usb_removed">USB đã được tháo</string>
+    <string name="music_scanning">Đang quét nhạc…</string>
+    <string name="music_source_unavailable">Không đọc được tệp. Kiểm tra USB.</string>
+    <string name="music_stream_unavailable">Không kết nối được nguồn trực tuyến</string>
+    <string name="music_stream_interrupted">Mất kết nối khi đang phát</string>
+    <string name="music_buffering">Đang tải…</string>
+    <string name="music_retry">Thử lại</string>
+    <string name="music_unknown_track">Không rõ tên bài</string>
+    <string name="music_unknown_artist">Không rõ nghệ sĩ</string>
+    <string name="music_track_count">%1$d bài</string>
+    <string name="music_library_footer">%1$d bài • %2$s</string>
+    <string name="music_queue_empty">Danh sách phát trống</string>
+
+    <!-- Online music (§13). The two group labels are the brief's own words and
+         are what makes a mixed result list readable at a glance. -->
+    <string name="music_search_hint">Tìm bài hát hoặc đài…</string>
+    <string name="music_search_local_group">Trên thiết bị</string>
+    <string name="music_search_online_group">Trực tuyến</string>
+    <string name="music_search_empty">Không có kết quả cho \"%1$s\"</string>
+    <string name="music_search_offline">Nhạc trực tuyến đang tắt trong Cài đặt</string>
+    <string name="music_online_loading">Đang tìm trên nguồn trực tuyến…</string>
+    <string name="music_online_no_config">Chưa cấu hình nguồn trực tuyến. Vào Cài đặt để nhập địa chỉ.</string>
+    <string name="music_online_provider_line">%1$s: %2$s</string>
+    <string name="music_online_count">%1$d kết quả</string>
+    <string name="music_online_failed">Không hỏi được nguồn</string>
+    <string name="music_online_ready">sẵn sàng</string>
+
+    <!-- Navigation -->
+    <string name="nav_mute">Tắt tiếng</string>
+    <string name="nav_unmute">Bật tiếng</string>
+    <string name="nav_end">Kết thúc</string>
+    <string name="nav_overview">Toàn cảnh</string>
+    <string name="nav_arrived">Đã đến nơi</string>
+    <string name="nav_then">Sau đó</string>
+    <string name="nav_eta_format">%1$s • %2$s • Đến %3$s</string>
+    <string name="nav_route_summary">%1$s • khoảng %2$s</string>
+    <string name="nav_start">Bắt đầu</string>
+    <string name="nav_cancel">Huỷ</string>
+    <string name="nav_calculating">Đang tính lộ trình…</string>
+    <string name="nav_rerouting">Đang tìm lộ trình mới…</string>
+    <string name="nav_no_destination">Chưa chọn điểm đến</string>
+    <string name="nav_no_pack">Chưa cài map pack — không thể dẫn đường</string>
+    <string name="nav_no_route">Chưa có lộ trình</string>
+    <string name="nav_route_best">Nhanh nhất</string>
+    <string name="nav_route_option_desc">Lộ trình %1$d trên %2$d</string>
+    <string name="nav_start_navigation">Đi</string>
+    <string name="nav_voice_unavailable">Thiết bị không có giọng tiếng Việt</string>
+    <string name="nav_follow_off">Bản đồ tự do</string>
+
+    <!-- Quick settings -->
+    <string name="qs_title">Cài đặt nhanh</string>
+    <string name="qs_wifi">Wi-Fi</string>
+    <string name="qs_bluetooth">Bluetooth</string>
+    <string name="qs_mobile_data">Dữ liệu 4G</string>
+    <string name="qs_theme">Chế độ tối</string>
+    <string name="qs_theme_auto">Tự động</string>
+    <string name="qs_theme_day">Ban ngày</string>
+    <string name="qs_theme_night">Ban đêm</string>
+    <string name="qs_brightness">Độ sáng</string>
+    <string name="qs_volume">Âm lượng</string>
+    <string name="qs_fullscreen">Màn hình tối</string>
+    <string name="qs_restart">Khởi động lại</string>
+    <string name="qs_settings">Cài đặt</string>
+    <string name="qs_unavailable">Thiết bị không hỗ trợ</string>
+    <string name="screen_unavailable">Không mở được màn hình này trên bản dựng hiện tại</string>
+    <string name="qs_permission_required">Cần cấp quyền để thay đổi mục này</string>
+    <string name="qs_on">Bật</string>
+    <string name="qs_off">Tắt</string>
+    <string name="qs_percent">%1$d%%</string>
+    <string name="qs_open_panel">Mở cài đặt</string>
+    <string name="qs_parking_mode">Chế độ đỗ xe</string>
+    <string name="qs_restart_confirm">Khởi động lại thiết bị?</string>
+    <string name="qs_restart_mic">Mic xe</string>
+
+    <!-- Settings. Every string here names a real fact or a real action; there
+         is no row for anything this build cannot do. -->
+    <string name="settings_section_map">Bản đồ</string>
+    <string name="settings_rescan_pack">Tìm lại map pack</string>
+    <string name="settings_pack_missing">Chưa có map pack</string>
+    <string name="settings_pack_ready">Đã dùng map pack: %1$s</string>
+    <string name="settings_section_permissions">Quyền truy cập</string>
+    <string name="settings_perm_brightness">Độ sáng màn hình</string>
+    <string name="settings_perm_granted">%1$s — đã cấp</string>
+    <string name="settings_perm_denied">%1$s — chạm để cấp</string>
+    <string name="settings_section_online">Nhạc trực tuyến</string>
+    <string name="settings_online_hint">Để trống nguồn nào thì nguồn đó báo BLOCKED_EXTERNAL_CONFIG trên màn hình nhạc. Đài Internet Radio không cần cấu hình.</string>
+    <string name="settings_online_feed_hint">URL feed Podcast (RSS)</string>
+    <string name="settings_online_pass_saved">Đã lưu mật khẩu — để trống nếu giữ nguyên</string>
+    <string name="settings_online_pass_none">Chưa có mật khẩu</string>
+    <string name="settings_online_saved">Đã lưu cấu hình nhạc trực tuyến</string>
+
+    <!-- Voice model management (§4 of the voice pilot). Every state name below
+         is the enum the store actually returns, spelled for the driver; the
+         screen never composes a state it was not given. -->
+    <string name="settings_section_voice">Giọng nói</string>
+    <string name="settings_voice_policy">Bộ nhận dạng</string>
+    <string name="settings_voice_policy_hint">Tự động dùng dịch vụ nhận dạng của máy và chuyển sang mô hình ngoại tuyến khi dịch vụ đó không có; Chỉ ngoại tuyến không gửi âm thanh ra ngoài trong bất kỳ trường hợp nào.</string>
+
+    <!-- Driving alerts section (inspired by reference APK). -->
+    <string name="settings_section_driving_alerts">Cảnh báo lái xe</string>
+    <string name="settings_alerts_master">Bật cảnh báo</string>
+    <string name="settings_alerts_master_hint">Tắt để im lặng toàn bộ cảnh báo khi lái xe</string>
+    <string name="settings_alert_speed">Cảnh báo vượt tốc độ</string>
+    <string name="settings_alert_camera">Cảnh báo camera giao thông</string>
+    <string name="settings_alert_navigation">Cảnh báo dẫn đường</string>
+
+    <!-- Voice feedback section. -->
+    <string name="settings_section_voice_feedback">Phản hồi giọng nói</string>
+    <string name="settings_voice_beep">Âm thanh beep</string>
+    <string name="settings_voice_beep_hint">Kêu beep khi mở mic, nhận dạng xong, hoặc gặp lỗi</string>
+    <string name="settings_voice_prompt_listen">Giọng nhắc "Xin mời nói"</string>
+    <string name="settings_voice_prompt_listen_hint">Phát giọng nói khi mở mic để lái xe biết đang lắng nghe</string>
+    <string name="settings_voice_auto_exec">Tự thực thi lệnh</string>
+    <string name="settings_voice_auto_exec_hint">Thực hiện lệnh ngay khi nhận dạng xong, không hỏi xác nhận</string>
+
+    <!-- Diagnostics / system info section. -->
+    <string name="settings_section_system">Hệ thống</string>
+    <string name="settings_device_info">Thông tin thiết bị</string>
+    <string name="settings_device_model">Model: %1$s</string>
+    <string name="settings_device_board">Mainboard: %1$s</string>
+    <string name="settings_device_screen">Màn hình: %1$dx%2$d</string>
+    <string name="settings_memory_info">RAM: %1$s</string>
+    <string name="settings_storage_info">Bộ nhớ: %1$s</string>
+    <string name="settings_map_diag">Nhật ký bản đồ</string>
+    <string name="settings_map_diag_hint">Xem chẩn đoán OpenGL / map surface</string>
+
+    <string name="voice_policy_auto">Tự động</string>
+    <string name="voice_policy_offline_only">Chỉ ngoại tuyến</string>
+    <string name="voice_policy_system_only">Chỉ hệ thống</string>
+    <string name="settings_voice_model_manage">Quản lý mô hình giọng nói</string>
+    <string name="settings_voice_model_cta">Cài mô hình giọng nói offline</string>
+    <string name="settings_voice_model_state">Mô hình: %1$s</string>
+
+    <string name="voice_model_title">Mô hình giọng nói offline</string>
+    <string name="voice_model_state_not_installed">chưa cài</string>
+    <string name="voice_model_state_validating">đang kiểm tra</string>
+    <string name="voice_model_state_ready">sẵn sàng</string>
+    <string name="voice_model_state_incompatible">không tương thích</string>
+    <string name="voice_model_state_corrupt">hỏng hoặc sai checksum</string>
+    <string name="voice_model_state_failed">không nạp được</string>
+    <string name="voice_model_version">Phiên bản: %1$s</string>
+    <string name="voice_model_size">Dung lượng: %1$s</string>
+    <string name="voice_model_license">Giấy phép: %1$s</string>
+    <string name="voice_model_source">Nguồn: %1$s</string>
+    <string name="voice_model_checksum">SHA-256: %1$s</string>
+    <string name="voice_model_abi">ABI: %1$s</string>
+    <string name="voice_model_reason">Lý do: %1$s</string>
+    <string name="voice_model_active_version">Đang dùng: %1$s</string>
+    <string name="voice_model_hint">Mô hình không nằm trong APK. Chép gói mô hình vào USB — một tệp .zip hoặc một thư mục có metadata.json — rồi cài tại đây. Sau khi cài, nhận dạng chạy hoàn toàn ngoại tuyến; không cần Internet.</string>
+    <string name="voice_model_import_zip">Cài từ tệp .zip</string>
+    <string name="voice_model_scan">Tìm trên bộ nhớ và USB</string>
+    <string name="voice_model_rescan">Kiểm tra lại</string>
+    <string name="voice_model_remove">Gỡ mô hình</string>
+    <string name="voice_model_install">Cài</string>
+    <string name="voice_model_remove_title">Gỡ mô hình giọng nói?</string>
+    <string name="voice_model_remove_body">Sau khi gỡ, lệnh giọng nói sẽ không hoạt động cho tới khi bạn cài lại mô hình.</string>
+    <string name="voice_model_removed">Đã gỡ mô hình giọng nói</string>
+    <string name="voice_model_import_running">Đang kiểm tra và cài mô hình…</string>
+    <string name="voice_model_import_done">Đã cài mô hình %1$s</string>
+    <string name="voice_model_import_failed">Không cài được mô hình: %1$s</string>
+    <string name="voice_model_kept_old">Mô hình đang dùng vẫn giữ nguyên.</string>
+    <string name="voice_model_scan_empty">Không tìm thấy thư mục mô hình nào trên bộ nhớ trong hay USB.</string>
+    <string name="voice_model_scan_found">Tìm thấy %1$d thư mục mô hình</string>
+    <string name="voice_model_no_permission">Cần quyền đọc bộ nhớ để tìm mô hình trên USB.</string>
+    <string name="voice_model_none">Chưa cài mô hình nào.</string>
+
+    <string name="settings_section_about">Thông tin</string>
+    <string name="settings_version">TS8 Launcher %1$s (%2$d)</string>
+    <string name="settings_version_unknown">không rõ</string>
+    <string name="settings_platform">Android %1$s (API %2$d)</string>
+
+    <!-- Parking -->
+    <string name="parking_message">Chuyến đi tốt đẹp nhé!</string>
+    <!-- The two destinations Parking offers while the car is stopped. They are
+         the reason the screen exists: before them the only exit was "tap to go
+         back", which landed on Home and left the driver to find the tab. -->
+    <string name="parking_choice_map">Bản đồ</string>
+    <string name="parking_choice_music">Nhạc</string>
+    <string name="parking_tap_to_exit">Chạm để quay lại</string>
+
+    <!-- Parking background. The image is the driver's own, picked from the
+         device's gallery and stored as a persisted content:// URI, so nothing
+         is shipped with the app and no photograph has to be licensed. -->
+    <string name="parking_background_pick">Đổi ảnh nền</string>
+    <string name="parking_background_clear">Dùng ảnh mặc định</string>
+    <string name="parking_background_failed">Không mở được ảnh đã chọn</string>
+    <string name="parking_background_picker_title">Chọn ảnh nền</string>
+
+    <!-- Apps -->
+    <string name="apps_title">Ứng dụng</string>
+    <string name="apps_empty">Không tìm thấy ứng dụng</string>
+    <string name="apps_open_failed">Không mở được ứng dụng này</string>
+    <string name="apps_permission_denied">Cần cấp quyền để mở ứng dụng</string>
+    <string name="apps_search_hint">Tìm ứng dụng…</string>
+
+    <!-- Permissions -->
+    <string name="perm_location_title">Cần quyền vị trí</string>
+    <string name="perm_location_body">Bản đồ và dẫn đường cần quyền truy cập GPS.</string>
+    <string name="perm_storage_title">Cần quyền đọc bộ nhớ</string>
+    <string name="perm_storage_body">Ứng dụng cần đọc bộ nhớ để tìm nhạc trong máy và USB.</string>
+    <string name="perm_grant">Cấp quyền</string>
+    <string name="perm_denied_forever">Quyền đã bị từ chối. Mở Cài đặt để cấp lại.</string>
+    <string name="perm_open_settings">Mở Cài đặt</string>
+
+    <!-- Generic -->
+    <string name="cd_map">Bản đồ</string>
+    <string name="cd_music_artwork">Ảnh bìa album</string>
+    <string name="cd_app_icon">Biểu tượng ứng dụng</string>
+    <string name="generic_loading">Đang tải…</string>
+    <string name="generic_error">Đã xảy ra lỗi</string>
+
+    <!-- Map management / map settings (§8). Every label here maps to a real
+         stored value that the map actually reads. -->
+    <string name="map_mgmt_title">Quản lý bản đồ</string>
+    <string name="map_mgmt_entry">Quản lý bản đồ &amp; cài đặt</string>
+    <string name="map_cta_install">Cài bản đồ</string>
+    <string name="map_cta_retry">Kiểm tra lại</string>
+    <string name="map_cta_diagnostics">Chẩn đoán</string>
+    <string name="map_section_packs">Map pack đã cài</string>
+    <string name="map_section_storage">Dung lượng</string>
+    <string name="map_section_display">Hiển thị</string>
+    <string name="map_section_speed">Tốc độ &amp; cảnh báo</string>
+    <string name="map_section_diagnostics">Chẩn đoán</string>
+    <string name="map_pack_active">Đang dùng</string>
+    <string name="map_pack_none">Chưa cài map pack</string>
+    <string name="map_pack_status_ready">Sẵn sàng</string>
+    <string name="map_pack_status_invalid">Lỗi: %1$s</string>
+    <string name="map_pack_status_validating">Đang kiểm tra…</string>
+    <string name="map_pack_region">Khu vực: %1$s</string>
+    <string name="map_pack_version">Phiên bản: %1$s</string>
+    <string name="map_pack_size">Dung lượng: %1$s</string>
+    <string name="map_pack_data_date">Dữ liệu: %1$s</string>
+    <string name="map_pack_routing_ok">Dữ liệu dẫn đường: có</string>
+    <string name="map_pack_routing_missing">Dữ liệu dẫn đường: thiếu — không thể dẫn đường</string>
+    <string name="map_pack_search_ok">Chỉ mục tìm kiếm: có (%1$d địa điểm)</string>
+    <string name="map_pack_search_missing">Chỉ mục tìm kiếm: thiếu — tìm offline không dùng được</string>
+    <string name="map_action_import">Nhập từ USB / bộ nhớ</string>
+    <string name="map_action_validate">Kiểm tra lại</string>
+    <string name="map_action_activate">Kích hoạt</string>
+    <string name="map_action_remove">Xoá</string>
+    <string name="map_action_repair">Sửa chữa</string>
+
+    <!-- Download section -->
+    <string name="map_section_download">Tải map pack</string>
+    <string name="map_download_server_label">Địa chỉ máy chủ</string>
+    <string name="map_download_server_hint">https://maps.ts8.vn/packs</string>
+    <string name="map_download_server_save">Lưu</string>
+    <string name="map_download_fetch">Tải danh sách</string>
+    <string name="map_download_fetching">Đang lấy danh sách…</string>
+    <string name="map_download_fetch_empty">Không có pack nào trên máy chủ</string>
+    <string name="map_download_fetch_failed">Không lấy được danh sách: %1$s</string>
+    <string name="map_download_no_server">Chưa cấu hình máy chủ tải. Nhập địa chỉ phía trên rồi bấm Lưu.</string>
+    <string name="map_download_action">Tải xuống</string>
+    <string name="map_download_installed">Đã cài</string>
+    <string name="map_download_cancel">Huỷ</string>
+    <string name="map_download_progress">Đang tải: %1$s (%2$d%%)</string>
+    <string name="map_download_installing">Đang cài đặt %1$s…</string>
+    <string name="map_download_done">Đã cài xong %1$s</string>
+    <string name="map_download_error">Lỗi tải %1$s: %2$s</string>
+    <string name="map_download_cancelled">Đã huỷ tải %1$s</string>
+    <string name="map_download_retry">Thử lại</string>
+    <string name="map_download_region">Vùng: %1$s</string>
+    <string name="map_import_title">Chọn file map pack</string>
+    <string name="map_import_zip_hint">Chọn file .ts8map hoặc .zip chứa metadata.json</string>
+    <string name="map_import_running">Đang nhập map pack…</string>
+    <string name="map_import_stage">Bước: %1$s</string>
+    <string name="map_import_done">Đã nhập map pack: %1$s</string>
+    <string name="map_import_failed">Nhập thất bại: %1$s</string>
+    <string name="map_import_zip_slip">File nén chứa đường dẫn không an toàn — đã chặn</string>
+    <string name="map_import_no_room">Không đủ dung lượng để nhập pack này</string>
+    <string name="map_import_kept_old">Map pack cũ vẫn được giữ nguyên</string>
+    <string name="map_remove_title">Xoá map pack?</string>
+    <string name="map_remove_body">Pack “%1$s” sẽ bị xoá khỏi bộ nhớ. Không thể hoàn tác.</string>
+    <string name="map_remove_active_body">“%1$s” đang được dùng. Hãy chọn pack thay thế trước, hoặc xác nhận để chuyển sang trạng thái không có bản đồ.</string>
+    <string name="map_remove_confirm_no_map">Chuyển sang không có bản đồ</string>
+    <string name="map_remove_done">Đã xoá %1$s</string>
+    <string name="map_remove_failed">Không xoá được: %1$s</string>
+    <string name="map_activate_done">Đang dùng %1$s</string>
+    <string name="map_free_space">Còn trống: %1$s / %2$s</string>
+    <string name="map_storage_location">Vị trí lưu: %1$s</string>
+    <string name="map_diag_copy">Sao chép chẩn đoán</string>
+    <string name="map_diag_copied">Đã sao chép chẩn đoán</string>
+    <string name="map_diag_empty">Chưa có dữ liệu chẩn đoán</string>
+    <string name="map_diag_view_log">Xem nhật ký lỗi</string>
+    <string name="map_diag_log_path">Nhật ký: %1$s</string>
+
+    <!-- Display settings group (§8). Options are Vietnamese labels over stable
+         enum names, so the stored value survives a locale change. -->
+    <string name="disp_mode">Chế độ bản đồ</string>
+    <string name="disp_mode_2d">2D</string>
+    <string name="disp_mode_3d">3D</string>
+    <string name="disp_mode_auto">Tự động</string>
+    <string name="disp_theme">Giao diện</string>
+    <string name="disp_theme_day">Sáng</string>
+    <string name="disp_theme_night">Tối</string>
+    <string name="disp_theme_auto">Theo thời gian</string>
+    <string name="disp_camera">Góc nhìn khi dẫn đường</string>
+    <string name="disp_camera_north">Hướng Bắc</string>
+    <string name="disp_camera_heading">Theo hướng xe</string>
+    <string name="disp_camera_perspective">Phối cảnh</string>
+    <string name="disp_zoom_default">Mức zoom mặc định</string>
+    <string name="disp_zoom_nav">Mức zoom khi dẫn đường</string>
+    <string name="disp_buildings_3d">Toà nhà 3D</string>
+    <string name="disp_labels_road">Tên đường</string>
+    <string name="disp_labels_poi">POI</string>
+    <string name="disp_labels_place">Địa danh</string>
+    <string name="disp_labels_housenumber">Số nhà</string>
+    <string name="disp_poi_density">Mật độ POI</string>
+    <string name="disp_poi_low">Thấp</string>
+    <string name="disp_poi_normal">Vừa</string>
+    <string name="disp_poi_high">Cao</string>
+    <string name="disp_text_size">Cỡ chữ và icon</string>
+    <string name="disp_size_small">Nhỏ</string>
+    <string name="disp_size_normal">Vừa</string>
+    <string name="disp_size_large">Lớn</string>
+    <string name="disp_route_travelled">Hiện đường đã đi</string>
+    <string name="disp_music_card">Hiện widget nhạc khi dẫn đường</string>
+    <string name="disp_route_colour">Màu đường chính</string>
+    <string name="disp_route_alt_colour">Màu đường thay thế</string>
+    <string name="disp_auto_follow">Tự bám theo xe</string>
+    <string name="disp_auto_centre">Tự căn giữa</string>
+    <string name="disp_follow_return">Quay lại bám xe sau</string>
+    <string name="disp_follow_return_5">5 giây</string>
+    <string name="disp_follow_return_10">10 giây</string>
+    <string name="disp_follow_return_20">20 giây</string>
+    <string name="disp_follow_return_off">Không tự quay lại</string>
+    <string name="disp_show_zoom">Nút zoom</string>
+    <string name="disp_show_compass">La bàn</string>
+    <string name="disp_show_recenter">Nút căn giữa</string>
+    <string name="disp_show_overview">Nút toàn cảnh</string>
+    <string name="disp_performance">Chế độ hiệu năng</string>
+    <string name="disp_perf_quality">Chất lượng</string>
+    <string name="disp_perf_balanced">Cân bằng</string>
+    <string name="disp_perf_saver">Tiết kiệm</string>
+    <string name="disp_restore_defaults">Khôi phục mặc định</string>
+    <string name="disp_restored">Đã khôi phục cài đặt hiển thị mặc định</string>
+
+    <!-- Speed & alerts group (§8). -->
+    <string name="speed_unit">Đơn vị tốc độ</string>
+    <string name="speed_unit_kmh">km/h</string>
+    <string name="speed_unit_mph">mph</string>
+    <string name="speed_show_current">Hiện tốc độ hiện tại</string>
+    <string name="speed_show_limit">Hiện giới hạn tốc độ</string>
+    <string name="speed_gps_filter">Ngưỡng lọc tốc độ GPS</string>
+    <string name="speed_gps_offset">Bù tốc độ GPS</string>
+    <string name="speed_gps_filter_off">Tắt lọc</string>
+    <string name="speed_smoothing">Làm mượt tốc độ</string>
+    <string name="speed_smooth_fast">Nhanh</string>
+    <string name="speed_smooth_balanced">Cân bằng</string>
+    <string name="speed_smooth_smooth">Mượt</string>
+    <string name="speed_alerts">Cảnh báo vượt tốc</string>
+    <string name="speed_threshold">Ngưỡng cảnh báo</string>
+    <string name="speed_threshold_0">Đúng giới hạn (0)</string>
+    <string name="speed_threshold_5">+5 km/h</string>
+    <string name="speed_threshold_10">+10 km/h</string>
+    <string name="speed_threshold_15">+15 km/h</string>
+    <string name="speed_threshold_custom">Tuỳ chỉnh (%1$d km/h)</string>
+    <string name="speed_alert_form">Hình thức cảnh báo</string>
+    <string name="speed_alert_visual">Chỉ hình ảnh</string>
+    <string name="speed_alert_audio">Âm thanh</string>
+    <string name="speed_alert_both">Cả hai</string>
+    <string name="speed_alert_volume">Âm lượng cảnh báo</string>
+    <string name="speed_cooldown">Khoảng nghỉ giữa cảnh báo</string>
+    <string name="speed_cooldown_5">5 giây</string>
+    <string name="speed_cooldown_15">15 giây</string>
+    <string name="speed_cooldown_30">30 giây</string>
+    <string name="speed_cooldown_60">60 giây</string>
+    <string name="speed_sustained">Chỉ cảnh báo khi vượt liên tục</string>
+    <string name="speed_no_data">--</string>
+    <string name="speed_limit_source">Nguồn giới hạn: %1$s</string>
+    <string name="speed_limit_none">Không có dữ liệu giới hạn tốc độ cho đường này</string>
+    <string name="speed_state">Trạng thái: %1$s</string>
+    <string name="speed_overspeed_alert">Vượt quá %1$d %2$s</string>
+
+    <!-- Voice Instant (§10-11). -->
+    <string name="voice_listening">Đang nghe…</string>
+    <string name="voice_processing">Đang xử lý…</string>
+    <string name="voice_confirm">Xác nhận: %1$s?</string>
+    <string name="voice_confirm_yes">Đồng ý</string>
+    <string name="voice_confirm_no">Huỷ</string>
+    <string name="voice_success">Đã thực hiện: %1$s</string>
+    <string name="voice_error_unavailable">Voice service unavailable — thiết bị không có dịch vụ nhận dạng giọng nói</string>
+    <string name="voice_error_no_match">Không nghe rõ. Thử lại hoặc nói ngắn hơn.</string>
+    <string name="voice_error_timeout">Hết thời gian chờ</string>
+    <string name="voice_error_permission">Cần quyền micro để dùng lệnh giọng nói</string>
+    <string name="voice_error_unknown_command">Không hiểu lệnh: “%1$s”</string>
+    <!-- The three states the offline pilot added. Each one exists because it
+         leads to a different action for the driver, and collapsing them into
+         "Voice service unavailable" would send them to fix the wrong thing:
+         a missing language is fixed by installing the model, a busy microphone
+         by closing the other app, and a cancellation by nothing at all. -->
+    <string name="voice_error_language">Chưa có tiếng Việt cho bộ nhận dạng</string>
+    <string name="voice_error_mic_busy">Micro đang bận</string>
+    <string name="voice_error_cancelled">Đã huỷ</string>
+    <string name="voice_unavailable_short">Voice</string>
+    <string name="voice_cancel">Huỷ</string>
+    <string name="voice_cmd_map">Mở bản đồ</string>
+    <string name="voice_cmd_navigate">Dẫn đường đến %1$s</string>
+    <string name="voice_cmd_search">Tìm %1$s</string>
+    <string name="voice_cmd_music_play">Phát nhạc</string>
+    <string name="voice_cmd_music_stop">Dừng nhạc</string>
+    <string name="voice_cmd_next">Bài tiếp theo</string>
+    <string name="voice_cmd_previous">Bài trước</string>
+    <string name="voice_cmd_phone">Mở điện thoại</string>
+    <string name="voice_cmd_app">Mở ứng dụng %1$s</string>
+    <string name="voice_cmd_volume_up">Tăng âm lượng</string>
+    <string name="voice_cmd_volume_down">Giảm âm lượng</string>
+    <string name="voice_cmd_home">Về trang chủ</string>
+    <string name="voice_conflict_music">Không rõ bài nào — đang phát nhạc thay thế</string>
+
+    <!-- Overlay chrome. Deliberately a small bar and not a full-screen sheet:
+         §11 forbids covering the maneuver card, which sits top-left on the map
+         at exactly the height a centred dialog would occupy. -->
+    <string name="voice_mic">Lệnh giọng nói</string>
+    <string name="voice_overlay_title">Voice Instant</string>
+    <string name="voice_hint">Nói lệnh ngắn, ví dụ “mở bản đồ”</string>
+    <string name="voice_close">Đóng</string>
+    <string name="voice_open_settings">Mở cài đặt quyền</string>
+    <string name="voice_retry">Nói lại</string>
+    <string name="voice_command_label">Lệnh: %1$s</string>
+    <string name="voice_executing">Đang thực hiện…</string>
+    <string name="voice_confirming">Cần xác nhận</string>
+    <!-- The transcript, quoted back to the driver. With the yes/no prompt gone
+         this is the only place the recognised words appear, so it is the line
+         that makes a misrecognition visible. The curly quotes are deliberate:
+         they delimit the recogniser's own output from the label. -->
+    <string name="voice_heard">Bạn nói: “%1$s”</string>
+    <string name="voice_state_error">Không thực hiện được</string>
+    <string name="voice_state_success">Xong</string>
+
+    <!-- Online music (§12-13). -->
+    <string name="music_tab_device">Trên thiết bị</string>
+    <string name="music_tab_online">Trực tuyến</string>
+    <string name="music_online_radio">Internet Radio</string>
+    <string name="music_online_podcast">Podcast</string>
+    <string name="music_online_server">Máy chủ nhạc</string>
+    <string name="music_online_buffering">Đang tải luồng…</string>
+    <string name="music_online_unavailable">Nguồn trực tuyến không dùng được: %1$s</string>
+    <string name="music_online_blocked">BLOCKED_EXTERNAL_CONFIG — chưa cấu hình endpoint/credential cho nguồn này</string>
+    <string name="music_online_retry">Thử lại</string>
+    <string name="music_online_offline">Không có kết nối — đang dùng nhạc trên thiết bị</string>
+    <string name="music_online_settings_title">Nguồn nhạc trực tuyến</string>
+    <string name="music_online_radio_hint">Dán URL luồng radio (http/https) để thêm vào danh sách</string>
+    <string name="music_online_server_url">Địa chỉ máy chủ (Navidrome/Jellyfin)</string>
+    <string name="music_online_server_user">Tên đăng nhập</string>
+    <string name="music_online_server_pass">Mật khẩu / token</string>
+    <string name="music_online_save">Lưu</string>
+    <string name="music_online_health_ok">Kết nối tốt</string>
+    <string name="music_online_health_fail">Không kết nối được: %1$s</string>
+    <string name="music_online_no_stream">Nguồn này không cho phép phát</string>
+
+    <!-- Parking mode (§18-19). -->
+    <string name="parking_title">Đỗ xe</string>
+    <string name="parking_enter">Vào chế độ đỗ xe</string>
+    <string name="parking_exit">Thoát chế độ đỗ xe</string>
+    <string name="parking_auto">Tự vào chế độ đỗ xe</string>
+    <string name="parking_auto_hint">Chỉ tự vào khi xe dừng đủ lâu và vị trí không còn dao động; không tự vào khi đang gọi điện, đang dẫn đường hoặc lùi xe</string>
+    <string name="parking_state">Trạng thái đỗ: %1$s</string>
+    <string name="parking_reason">Lý do: %1$s</string>
+    <string name="parking_return">Quay lại</string>
+
+    <!-- App state machine / overlays (§16-17). -->
+    <string name="overlay_import_progress">Đang nhập map pack…</string>
+    <string name="error_dialog_ok">Đóng</string>
+    <string name="error_dialog_retry">Thử lại</string>
+
+    <string name="generic_retry">Thử lại</string>
+    <string name="generic_back">Quay lại</string>
+    <string name="generic_close">Đóng</string>
+    <string name="generic_cancel">Huỷ</string>
+    <string name="generic_ok">Đồng ý</string>
+
+    <!-- ==================================================================
+         Batch 1: compact top overlay (§4).
+
+         The full status row is gone from the normal screens because the TS8
+         vendor bar already shows clock, date, battery, Wi-Fi, Bluetooth and
+         mobile. What remains is the three things the vendor bar cannot know:
+         the weather state, the microphone and the route into Quick Settings.
+         ================================================================== -->
+    <string name="overlay_voice">Giọng nói</string>
+    <string name="overlay_quick_settings">Cài đặt nhanh</string>
+
+    <!-- Weather has three states and no fourth. UNAVAILABLE is a real answer,
+         not a placeholder: the reading comes from Open-Meteo for the car's own
+         GPS coordinates, so when there is no fix or no answer the chip says so
+         rather than printing a degree. The short form is what the chip shows;
+         the long form is its content description. -->
+    <string name="weather_loading">Đang tải thời tiết</string>
+    <string name="weather_unavailable">Chưa có thời tiết</string>
+    <string name="weather_unavailable_long">Chưa lấy được thời tiết cho vị trí hiện tại</string>
+    <string name="weather_no_gps">Chưa có GPS</string>
+
+    <!-- ==================================================================
+         Batch 1: map shell states (§6).
+
+         These are the six phases the map shell renders. None of them claims
+         the renderer is fixed; they exist so a map that cannot draw says why
+         instead of showing a white rectangle.
+         ================================================================== -->
+    <string name="map_phase_initializing">Đang khởi tạo bản đồ…</string>
+    <string name="map_phase_validating_pack">Đang kiểm tra gói bản đồ…</string>
+    <string name="map_phase_loading_style">Đang tải kiểu hiển thị…</string>
+    <string name="map_phase_waiting_first_frame">Đang chờ khung hình đầu tiên…</string>
+    <string name="map_phase_ready">Sẵn sàng</string>
+
+    <string name="map_error_title">Không hiển thị được bản đồ</string>
+    <string name="map_error_code">Mã lỗi: %1$s</string>
+    <string name="map_error_pack">Gói đang dùng: %1$s</string>
+    <string name="map_error_pack_none">Gói đang dùng: chưa có</string>
+    <string name="map_error_open_management">Cài đặt bản đồ</string>
+    <string name="map_error_details">Chi tiết</string>
+    <string name="map_error_details_title">Chi tiết lỗi bản đồ</string>
+    <string name="map_error_first_frame_timeout">Bản đồ đã nạp xong kiểu hiển thị nhưng chưa vẽ được khung hình nào sau %1$d giây. Gói bản đồ có thể chưa đúng định dạng hoặc trình kết xuất của thiết bị không dựng được nó.</string>
+    <string name="map_error_renderer_unavailable">Không khởi tạo được bản đồ trên thiết bị này: lớp kết xuất OpenGL không tạo được mặt vẽ, đã thử cả SurfaceView và TextureView. Đây là giới hạn firmware/ROM, không phải lỗi gói bản đồ.</string>
+    <string name="map_management">Quản lý bản đồ</string>
+
+    <!-- ==================================================================
+         Batch 1: volume capability (§8).
+
+         NO_EFFECT is the honest answer when the stream accepts a write and
+         does not move. It is deliberately one sentence, shown once per
+         session, and it never claims the volume changed.
+         ================================================================== -->
+    <string name="volume_no_effect">Không thể điều chỉnh âm lượng hệ thống trên thiết bị này.</string>
+    <string name="volume_unavailable">Không hỗ trợ trên thiết bị này</string>
+    <string name="volume_open_system">Mở điều khiển âm lượng hệ thống</string>
+    <string name="volume_supported">Điều chỉnh được</string>
+    <string name="volume_unknown">Chưa kiểm tra</string>
+
+    <!-- ==================================================================
+         Batch 1: music source selector and online providers (§7).
+         ================================================================== -->
+    <string name="music_source_device">Trên thiết bị</string>
+    <string name="music_source_usb">USB</string>
+    <string name="music_source_online">Trực tuyến</string>
+    <string name="music_source_setup">Thiết lập</string>
+    <string name="music_source_configured">Đã cấu hình</string>
+    <string name="music_source_not_configured">Chưa cấu hình</string>
+    <string name="music_source_missing">Chưa cấu hình — thiếu %1$s</string>
+    <string name="music_search_open">Tìm bài hát hoặc đài</string>
+
+    <!-- ==================================================================
+         Batch 1: diagnostics (§11).
+         ================================================================== -->
+    <string name="diagnostics_title">Chẩn đoán</string>
+    <string name="diagnostics_export">Xuất chẩn đoán</string>
+    <string name="diagnostics_exported">Đã lưu: %1$s</string>
+    <string name="diagnostics_export_failed">Không ghi được tệp chẩn đoán: %1$s</string>
+    <string name="diagnostics_app_version">Phiên bản</string>
+    <string name="diagnostics_build_hash">Bản dựng</string>
+    <string name="diagnostics_mode">Chế độ hiện tại</string>
+    <string name="diagnostics_map_pack">Gói bản đồ</string>
+    <string name="diagnostics_map_phase">Trạng thái bản đồ</string>
+    <string name="diagnostics_music">Nhạc</string>
+    <string name="diagnostics_voice">Giọng nói</string>
+    <string name="diagnostics_parking">Đỗ xe</string>
+    <string name="diagnostics_volume">Âm lượng</string>
+    <string name="diagnostics_open">Chẩn đoán</string>
+    <string name="diagnostics_value_none">không có</string>
+
+    <!-- Rows the report adds beyond §11's list. Each names a fact the screen
+         can actually read; none of them is derived or guessed. -->
+    <string name="diagnostics_generated_at">Xuất lúc</string>
+    <string name="diagnostics_platform">Nền tảng</string>
+    <string name="diagnostics_navigation">Dẫn đường</string>
+    <string name="diagnostics_providers">Nguồn trực tuyến</string>
+    <string name="diagnostics_footer">Tệp này không chứa mật khẩu, khoá truy cập hay toạ độ cá nhân.</string>
+    <string name="diagnostics_export_hint">Tệp được ghi vào thư mục Download của thiết bị; nếu không ghi được, tệp nằm trong thư mục riêng của ứng dụng.</string>
+    <string name="diagnostics_export_done">Đã xuất chẩn đoán</string>
+    <string name="diagnostics_no_storage">không có thư mục ghi được</string>
+    <string name="diagnostics_music_idle">không phát</string>
+    <string name="diagnostics_music_playing">đang phát “%1$s”</string>
+    <string name="diagnostics_music_paused">tạm dừng “%1$s”</string>
+    <string name="diagnostics_service_connected">dịch vụ đã kết nối</string>
+    <string name="diagnostics_service_disconnected">dịch vụ chưa kết nối</string>
+    <string name="diagnostics_voice_tts_ready">giọng tiếng Việt sẵn sàng</string>
+    <string name="diagnostics_voice_tts_missing">thiếu giọng tiếng Việt</string>
+    <string name="diagnostics_voice_recognition_ready">nhận dạng giọng nói sẵn sàng</string>
+    <string name="diagnostics_voice_recognition_missing">thiếu dịch vụ nhận dạng</string>
+    <string name="diagnostics_voice_model_ready">mô hình %1$s</string>
+    <string name="diagnostics_voice_model_unknown">chưa rõ mô hình</string>
+    <string name="diagnostics_voice_model_state">mô hình %1$s</string>
+    <string name="volume_no_effect_short">Không có tác dụng</string>
+
+    <!-- Said only when the manifest no longer resolves Map Management. The
+         screen exists, so silence would read as a dead button. -->
+    <string name="map_management_unavailable">Không mở được Quản lý bản đồ trên bản dựng này</string>
+</resources>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Search — design state 4.
+
+  Three regions, as the design lays them out:
+
+  * the query field, full width at the top, with a clear button;
+  * the result list on the left, one row per place with name, address and
+    straight-line distance;
+  * the selected place on the right, over a map preview of it.
+
+  The map preview is the real renderer, in the map tab. A second `MapView` on
+  the search screen would mean a second GL surface and a second style load on a
+  device that can barely afford one, so the right panel shows the place's
+  information and the map appears when the driver taps "Lộ trình" — that
+  handoff opens the real map already centred on the place. See `SearchActivity`.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <!-- §4: no launcher status row. Search is where the driver types, and the
+         vendor bar is still on screen behind it; a second clock above a
+         keyboard adds nothing and costs a row of height. -->
+
+    <!-- ================= query field ================= -->
+    <LinearLayout
+        android:id="@+id/searchBar"
+        android:layout_width="0dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="@dimen/screen_pad"
+        android:layout_marginEnd="@dimen/screen_pad"
+        android:layout_marginTop="@dimen/vendor_bar_inset"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/gap"
+        android:paddingEnd="@dimen/gap_small"
+        android:background="@drawable/bg_search_field"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_search"
+            app:tint="@color/text_tertiary"
+            android:contentDescription="@null" />
+
+        <EditText
+            android:id="@+id/searchInput"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/gap_small"
+            android:background="@null"
+            android:hint="@string/search_hint"
+            android:textColorHint="@color/text_tertiary"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_body"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:importantForAutofill="no" />
+
+        <ProgressBar
+            android:id="@+id/searchSpinner"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginEnd="@dimen/gap_small"
+            android:indeterminateTint="@color/accent"
+            android:visibility="gone" />
+
+        <!-- Voice Instant from the search field.
+             The base implementation hid a microphone here because there was no
+             backend; there is one now (`VoiceInstantController`), so the
+             affordance is drawn and wired in `SearchActivity`. It sits inside
+             the field because that is where the design puts it, and it speaks a
+             query rather than opening a second overlay. -->
+        <ImageButton
+            android:id="@+id/btnVoice"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="@dimen/gap_small"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_mic"
+            app:tint="@color/text_secondary"
+            android:contentDescription="@string/voice_mic" />
+
+        <ImageButton
+            android:id="@+id/btnClear"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_close"
+            app:tint="@color/text_tertiary"
+            android:contentDescription="@string/search_clear"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_chevron_left"
+            app:tint="@color/text_secondary"
+            android:contentDescription="@string/search_close" />
+    </LinearLayout>
+
+    <!-- ================= results ================= -->
+    <!--
+      A guideline rather than `layout_constraintWidth_percent`: the two panes
+      are siblings and a percentage width on each would leave their shared edge
+      to rounding, so on a 1280 panel the split would drift by a few pixels
+      between them.
+    -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/splitGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.56" />
+
+    <LinearLayout
+        android:id="@+id/resultsPane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/screen_pad"
+        android:layout_marginTop="@dimen/gap_small"
+        android:layout_marginBottom="@dimen/gap_small"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/splitGuide">
+
+        <!-- Says what the list currently is: the saved places when nothing is
+             typed, otherwise the hit count. Without it an empty query looks
+             like a broken search that returns a list. -->
+        <TextView
+            android:id="@+id/resultsHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/gap_small"
+            android:paddingEnd="@dimen/gap_small"
+            android:paddingBottom="@dimen/gap_small"
+            android:textColor="@color/text_tertiary"
+            android:textSize="@dimen/text_caption"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="12 kết quả" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/resultsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:scrollbars="none" />
+
+        <LinearLayout
+            android:id="@+id/resultsEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_search"
+                app:tint="@color/text_tertiary"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:id="@+id/resultsEmptyText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:gravity="center"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_body"
+                android:text="@string/search_empty_prompt" />
+        </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <!--
+      The pane is always present. Hiding it when nothing is selected would let
+      the result list stretch to full width and then snap back on the first tap,
+      and a ConstraintSet swap to avoid that costs a layout pass for a state the
+      screen is in at most a second. A hint occupies it instead.
+    -->
+    <LinearLayout
+        android:id="@+id/detailPane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/gap"
+        android:layout_marginEnd="@dimen/screen_pad"
+        android:layout_marginTop="@dimen/gap_small"
+        android:layout_marginBottom="@dimen/gap_small"
+        android:orientation="vertical"
+        android:padding="@dimen/card_pad"
+        android:background="@drawable/bg_card"
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toEndOf="@id/resultsPane"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/detailHint"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:textColor="@color/text_tertiary"
+            android:textSize="@dimen/text_body"
+            android:text="@string/search_select_hint" />
+
+        <LinearLayout
+            android:id="@+id/detailBody"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+        <!-- The place's category as a small chip, then its name. -->
+        <TextView
+            android:id="@+id/detailCategory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:background="@drawable/bg_chip"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_micro"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="Cầu" />
+
+        <TextView
+            android:id="@+id/detailName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_small"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_headline"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end"
+            tools:text="Cầu Rồng" />
+
+        <TextView
+            android:id="@+id/detailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_body"
+            android:maxLines="2"
+            android:ellipsize="end"
+            tools:text="Đ. Nguyễn Văn Linh, Đà Nẵng" />
+
+        <TextView
+            android:id="@+id/detailDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_small"
+            android:textColor="@color/text_tertiary"
+            android:textSize="@dimen/text_caption"
+            tools:text="6,2 km" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/gap"
+            android:background="@color/divider" />
+
+        <!-- Nearest nothing: the place's own coordinates, which is what the
+             route will use. Shown because on a head unit the driver sometimes
+             needs to read the number out, and because it proves the record. -->
+        <TextView
+            android:id="@+id/detailCoords"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_small"
+            android:textColor="@color/text_tertiary"
+            android:textSize="@dimen/text_micro"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="16.06167, 108.22718" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/btnRoute"
+            style="@style/Button.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/search_route" />
+
+        <Button
+            android:id="@+id/btnSave"
+            style="@style/Button.Ghost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_small"
+            android:text="@string/search_save" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.ts8.launcher.ui.BottomNavView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

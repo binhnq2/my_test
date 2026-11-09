@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Quick settings — design state 6.
+
+  Four toggle tiles in the design (Wi-Fi, Bluetooth, dữ liệu 4G, chế độ tối),
+  then a brightness slider and a volume slider, then three wide actions
+  (màn hình tối, khởi động lại, cài đặt).
+
+  Every control is bound to an action this launcher is actually allowed to
+  perform on Android 6. What is not allowed is either hidden or visibly
+  disabled with the reason — never a switch that flicks back with no message.
+  See `QuickSettingsActivity` for the per-control permissions table.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <!-- §4: no launcher status row on Quick Settings. The screen keeps its own
+         title, which is what tells the driver where they are; the clock and
+         the radios above it were the second copy of the vendor bar. -->
+    <TextView
+        android:id="@+id/qsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_pad"
+        android:layout_marginTop="@dimen/vendor_bar_inset"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_title"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/qs_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/qsNote"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/gap"
+        android:layout_marginEnd="@dimen/screen_pad"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="@color/text_tertiary"
+        android:textSize="@dimen/text_caption"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="Mục mờ cần quyền hệ thống"
+        app:layout_constraintTop_toTopOf="@id/qsTitle"
+        app:layout_constraintBottom_toBottomOf="@id/qsTitle"
+        app:layout_constraintStart_toEndOf="@id/qsTitle"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- ================= toggles ================= -->
+    <LinearLayout
+        android:id="@+id/toggleRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_pad"
+        android:layout_marginEnd="@dimen/screen_pad"
+        android:layout_marginTop="@dimen/gap"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        app:layout_constraintTop_toBottomOf="@id/qsTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.ts8.launcher.ui.QsTileView
+            android:id="@+id/tileWifi"
+            style="@style/QsTile"
+            app:qsIcon="@drawable/ic_wifi"
+            app:qsLabel="@string/qs_wifi" />
+
+        <com.ts8.launcher.ui.QsTileView
+            android:id="@+id/tileBluetooth"
+            style="@style/QsTile"
+            android:layout_marginStart="@dimen/gap"
+            app:qsIcon="@drawable/ic_bluetooth"
+            app:qsLabel="@string/qs_bluetooth" />
+
+        <com.ts8.launcher.ui.QsTileView
+            android:id="@+id/tileMobile"
+            style="@style/QsTile"
+            android:layout_marginStart="@dimen/gap"
+            app:qsIcon="@drawable/ic_signal"
+            app:qsLabel="@string/qs_mobile_data" />
+
+        <com.ts8.launcher.ui.QsTileView
+            android:id="@+id/tileTheme"
+            style="@style/QsTile"
+            android:layout_marginStart="@dimen/gap"
+            app:qsIcon="@drawable/ic_moon"
+            app:qsLabel="@string/qs_theme" />
+    </LinearLayout>
+
+    <!-- ================= sliders ================= -->
+    <LinearLayout
+        android:id="@+id/brightnessRow"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/qs_slider_height"
+        android:layout_marginStart="@dimen/screen_pad"
+        android:layout_marginEnd="@dimen/screen_pad"
+        android:layout_marginTop="@dimen/gap"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/gap"
+        android:paddingEnd="@dimen/gap"
+        android:background="@drawable/bg_card_raised"
+        app:layout_constraintTop_toBottomOf="@id/toggleRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/brightnessIcon"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_brightness"
+            app:tint="@color/text_secondary"
+            android:contentDescription="@string/qs_brightness" />
+
+        <!--
+          A SeekBar here steps the system brightness. It is disabled until the
+          driver grants WRITE_SETTINGS, and tapping it in that state opens the
+          grant screen: the setting genuinely needs that permission, so asking
+          for it is the honest behaviour rather than faking the ramp.
+        -->
+        <SeekBar
+            android:id="@+id/brightnessSlider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/gap"
+            android:progressDrawable="@drawable/progress_music"
+            android:thumb="@drawable/seek_thumb" />
+
+        <TextView
+            android:id="@+id/brightnessValue"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            tools:text="70%" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/volumeRow"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/qs_slider_height"
+        android:layout_marginStart="@dimen/screen_pad"
+        android:layout_marginEnd="@dimen/screen_pad"
+        android:layout_marginTop="@dimen/gap_small"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/gap"
+        android:paddingEnd="@dimen/gap"
+        android:background="@drawable/bg_card_raised"
+        app:layout_constraintTop_toBottomOf="@id/brightnessRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/ic_volume"
+            app:tint="@color/text_secondary"
+            android:contentDescription="@string/qs_volume" />
+
+        <SeekBar
+            android:id="@+id/volumeSlider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/gap"
+            android:progressDrawable="@drawable/progress_music"
+            android:thumb="@drawable/seek_thumb" />
+
+        <TextView
+            android:id="@+id/volumeValue"
+            android:layout_width="44dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            tools:text="24" />
+    </LinearLayout>
+
+    <!-- ================= wide actions ================= -->
+    <LinearLayout
+        android:id="@+id/actionRow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_pad"
+        android:layout_marginEnd="@dimen/screen_pad"
+        android:layout_marginTop="@dimen/gap"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        app:layout_constraintTop_toBottomOf="@id/volumeRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btnScreenOff"
+            style="@style/Button.Ghost"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:text="@string/qs_fullscreen"
+            android:drawableStart="@drawable/ic_moon"
+            android:drawablePadding="@dimen/gap_small" />
+
+        <Button
+            android:id="@+id/btnParking"
+            style="@style/Button.Ghost"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/gap"
+            android:text="@string/qs_parking_mode"
+            android:drawableStart="@drawable/ic_parking"
+            android:drawablePadding="@dimen/gap_small" />
+
+        <Button
+            android:id="@+id/btnRestart"
+            style="@style/Button.Ghost"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/gap"
+            android:text="@string/qs_restart"
+            android:drawableStart="@drawable/ic_power"
+            android:drawablePadding="@dimen/gap_small" />
+
+        <Button
+            android:id="@+id/btnMapManagement"
+            style="@style/Button.Ghost"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/gap"
+            android:text="@string/map_management"
+            android:drawableStart="@drawable/ic_layers"
+            android:drawablePadding="@dimen/gap_small" />
+
+        <Button
+            android:id="@+id/btnSettings"
+            style="@style/Button.Ghost"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/gap"
+            android:text="@string/qs_settings"
+            android:drawableStart="@drawable/ic_settings"
+            android:drawablePadding="@dimen/gap_small" />
+    </LinearLayout>
+
+    <com.ts8.launcher.ui.BottomNavView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

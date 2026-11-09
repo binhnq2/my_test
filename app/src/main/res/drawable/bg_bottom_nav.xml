@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The navigation bar's own surface.
+
+  Referenced from view_bottom_nav.xml, which previously painted the bar with a
+  flat `@color/surface_nav`. On a panel where every screen ends in this bar,
+  a flat fill made the bar visually continuous with the content above it and
+  the "behind the content" relationship the design draws was lost.
+
+  The gradient runs dark at the top to darker at the bottom, the opposite of a
+  card: content sits above the bar and a surface that is being lit from the
+  content's side has its shadow at the bottom. A 1dp top border in the accent's
+  hairline is what makes the bar a distinct layer rather than a fade.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="@color/surface_nav_top"
+        android:endColor="@color/surface_nav_bottom"
+        android:type="linear" />
+    <stroke
+        android:width="@dimen/card_border"
+        android:color="@color/accent_hairline" />
+</shape>

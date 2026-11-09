@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One row in the music library list.
+
+  Used for tracks, albums, artists and playlists alike: the list is a single
+  RecyclerView whose content changes with the tab, and giving each kind its own
+  row layout would mean four adapters and four chances to drift. The leading
+  tile is the album-art position; the trailing chevron means "this opens
+  something" and is hidden for leaf rows (a track plays in place).
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:minHeight="56dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
+    android:background="@drawable/bg_list_item">
+
+    <FrameLayout
+        android:id="@+id/rowArtworkFrame"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="@drawable/bg_card_raised">
+
+        <ImageView
+            android:id="@+id/rowArtwork"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@null"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/rowIcon"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_nav_music"
+            app:tint="@color/text_tertiary"
+            android:contentDescription="@null" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/gap"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/rowTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_body"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Chạy Về Nơi Phía Anh" />
+
+        <TextView
+            android:id="@+id/rowSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Khắc Việt" />
+    </LinearLayout>
+
+    <!-- Shown only for rows that open a collection. -->
+    <ImageView
+        android:id="@+id/rowChevron"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_chevron_right"
+        app:tint="@color/text_tertiary"
+        android:contentDescription="@null"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <!-- The "now playing" bar on the current row. A dot rather than a
+         background change, so it reads on both a light and a dark row. -->
+    <View
+        android:id="@+id/rowPlayingDot"
+        android:layout_width="6dp"
+        android:layout_height="6dp"
+        android:layout_marginEnd="@dimen/gap_small"
+        android:background="@drawable/bg_circle_accent"
+        android:visibility="gone"
+        tools:visibility="gone" />
+</LinearLayout>

@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Home — design state 1.
+
+  `ConstraintLayout` rather than nested LinearLayouts because the map must fill
+  *all* space the right column does not take, at any width from 1024x600 up, and
+  must be able to grow under the floating speed and zoom controls. Constraints
+  express that in one place; weights across nested rows do not.
+
+  Nothing here is a placeholder. `mapHost` is the real MapView container (the
+  view is added in code, on the Activity's lifecycle, by `MapHost`),
+  `musicCard` is a real `MusicCardView` reading the same `PlaybackState` the
+  music screen does, and the speed chip reads the location pipeline's own speed.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <!-- ================================================================
+         Compact top overlay (§4)
+
+         Was the full StatusBarView: clock, date, Wi-Fi, mobile, Bluetooth and
+         battery — every one of which the TS8 vendor bar already draws. What
+         remains is the weather state, the microphone and the Quick Settings
+         entry, which are the three things the vendor bar cannot provide.
+
+         The id is still `statusBar` because four siblings below constrain
+         themselves to its bottom edge; renaming it would silently drop those
+         constraints and put the map under the overlay.
+         ================================================================ -->
+    <com.ts8.launcher.ui.CompactTopBar
+        android:id="@+id/statusBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/top_overlay_height"
+        android:background="@drawable/bg_top_overlay"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- ================================================================
+         Map, left/centre
+         ================================================================ -->
+    <FrameLayout
+        android:id="@+id/mapHost"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/gap"
+        android:layout_marginTop="@dimen/gap_small"
+        android:layout_marginEnd="@dimen/gap"
+        android:layout_marginBottom="@dimen/gap_small"
+        android:background="@color/surface_card"
+        app:layout_constraintTop_toBottomOf="@id/statusBar"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/musicCard">
+
+        <!--
+          The MapView is inserted at index 0 here, so every sibling below stays
+          above it without any elevation tricks.
+        -->
+
+        <!-- ================================================================
+             The map shell's six phases and its failure surface (§6).
+
+             Replaces the old `mapPlaceholder`, which was a sentence and two
+             buttons — the sentence did not say which phase the renderer was in
+             or what the error code was, and the two buttons could not reach the
+             pack list. This is the same include the Map screen draws, so the
+             two screens cannot disagree about what a broken map looks like.
+             ================================================================ -->
+        <include
+            android:id="@+id/mapPhase"
+            layout="@layout/view_map_phase"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Speed chip, top-left of the map as the design places it. -->
+        <LinearLayout
+            android:id="@+id/speedChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_margin="@dimen/gap_small"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:minWidth="72dp"
+            android:padding="@dimen/gap_small"
+            android:background="@drawable/bg_speed_card">
+
+            <TextView
+                android:id="@+id/speedValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_display"
+                android:includeFontPadding="false"
+                android:text="0"
+                tools:text="48" />
+
+            <TextView
+                android:id="@+id/speedUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_tertiary"
+                android:textSize="@dimen/text_title"
+                android:text="@string/home_speed_unit" />
+        </LinearLayout>
+
+        <!--
+          Speed-limit roundel, drawn to the design's shape but hidden unless the
+          pack actually carries a limit for the road under the car. The design
+          shows 60; printing 60 everywhere would be a fabricated limit, which
+          the spec forbids — the Đà Nẵng extract tags `maxspeed` on only ~6 % of
+          highway ways, so in practice this stays hidden. See
+          docs/KNOWN_LIMITATIONS.md.
+        -->
+        <FrameLayout
+            android:id="@+id/speedLimit"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="96dp"
+            android:layout_marginTop="@dimen/gap_small"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_speed_limit" />
+
+            <TextView
+                android:id="@+id/speedLimitValue"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/speed_limit_ring"
+                android:textSize="@dimen/text_title"
+                android:textStyle="bold"
+                tools:text="60" />
+        </FrameLayout>
+
+        <!-- Compass / zoom / layers, right edge as in the design. -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="@dimen/gap_small"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/btnRecenter"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_compass"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/home_recenter" />
+
+            <ImageButton
+                android:id="@+id/btnZoomIn"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:layout_marginTop="@dimen/gap_small"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_plus"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/home_zoom_in" />
+
+            <ImageButton
+                android:id="@+id/btnZoomOut"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:layout_marginTop="@dimen/gap_small"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_minus"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/home_zoom_out" />
+
+            <ImageButton
+                android:id="@+id/btnLayers"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:layout_marginTop="@dimen/gap_small"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_layers"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/home_layers" />
+
+            <!-- Map Management, for the same reason as on `activity_map`: the
+                 `Cài đặt bản đồ` button in the phase surface disappears as soon
+                 as the map reaches READY, so a correctly loaded map would
+                 otherwise have no route into pack management from this screen.
+                 Not part of the `Hiển thị` zoom/recentre group, so it is never
+                 hidden by `applyControlVisibility`. -->
+            <ImageButton
+                android:id="@+id/btnMapSettings"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:layout_marginTop="@dimen/gap_small"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/map_error_open_management" />
+        </LinearLayout>
+
+        <!-- §16: "Khi quay Home trong lúc navigation, Home hiển thị
+             navigation-aware layout". A strip above the search field, gone
+             unless guidance is actually running, showing the next instruction
+             and the distance to it — read from the navigator, never a sample.
+             Tapping it returns to the navigation screen.
+
+             Placed here rather than in a second window so it cannot be left
+             behind over the map, and constrained above the search field so it
+             never covers the one control that opens search. -->
+        <LinearLayout
+            android:id="@+id/navStrip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="@dimen/gap"
+            android:layout_marginEnd="@dimen/gap"
+            android:layout_marginBottom="64dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/gap"
+            android:paddingEnd="@dimen/gap"
+            android:paddingTop="@dimen/gap_small"
+            android:paddingBottom="@dimen/gap_small"
+            android:background="@drawable/bg_eta_strip"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/navStripIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_maneuver_straight"
+                app:tint="@color/accent"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:id="@+id/navStripText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/gap_small"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_body"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="Rẽ phải vào Nguyễn Văn Linh · 320 m" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_chevron_right"
+                app:tint="@color/text_tertiary"
+                android:contentDescription="@null" />
+        </LinearLayout>
+
+        <!-- Search entry, bottom of the map. Opens the search screen. -->
+        <LinearLayout
+            android:id="@+id/searchField"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/gap"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/gap"
+            android:paddingEnd="@dimen/gap_small"
+            android:background="@drawable/bg_search_field">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_search"
+                app:tint="@color/text_tertiary"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/gap_small"
+                android:textColor="@color/text_tertiary"
+                android:textSize="@dimen/text_body"
+                android:text="@string/search_hint" />
+
+            <!-- Voice Instant's trigger: the design's microphone, now backed by
+                 a real recogniser (`VoiceInstantController`). The field itself
+                 still opens search on tap; this button is its own target so a
+                 thumb aiming at the mic cannot open the keyboard instead. -->
+            <ImageButton
+                android:id="@+id/btnVoice"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="@dimen/gap_small"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_mic"
+                app:tint="@color/text_secondary"
+                android:contentDescription="@string/voice_mic" />
+        </LinearLayout>
+
+        <!-- GPS waiting hint, shown until the first accepted fix. -->
+        <TextView
+            android:id="@+id/gpsHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="@dimen/gap"
+            android:paddingStart="@dimen/gap"
+            android:paddingEnd="@dimen/gap"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="@drawable/bg_chip"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            android:text="@string/home_gps_searching"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <!-- Traffic-sign proximity alert card. Shows the approaching sign's
+             icon and distance when a traffic sign/camera is within alert range. -->
+        <LinearLayout
+            android:id="@+id/trafficAlertCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/gap"
+            android:layout_marginEnd="@dimen/gap"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/card_pad"
+            android:paddingEnd="@dimen/card_pad"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="@drawable/bg_chip"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/trafficAlertIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="6dp"
+                android:scaleType="fitCenter"
+                tools:src="@drawable/ic_speed_limit" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/trafficAlertLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_body"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="Camera phạt nguội" />
+
+                <TextView
+                    android:id="@+id/trafficAlertDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/danger"
+                    android:textSize="@dimen/text_caption"
+                    tools:text="250 m" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- ================================================================
+         Music card, right column
+         ================================================================ -->
+    <com.ts8.launcher.ui.MusicCardView
+        android:id="@+id/musicCard"
+        android:layout_width="@dimen/music_card_width"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/gap_small"
+        android:layout_marginEnd="@dimen/gap"
+        android:layout_marginBottom="@dimen/gap_small"
+        app:layout_constraintTop_toBottomOf="@id/statusBar"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- ================================================================
+         Bottom navigation — the only navigation in the app.
+         ================================================================ -->
+    <com.ts8.launcher.ui.BottomNavView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

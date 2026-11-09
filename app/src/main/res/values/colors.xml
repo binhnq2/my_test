@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ==================================================================
+         Colour tokens derived from docs/UI_design.png.
+         Dark theme is the product default (the head unit is always dark);
+         the light block exists so the "Chế độ tối" toggle has a real target.
+         ================================================================== -->
+
+    <!-- Surfaces -->
+    <color name="bg_root">#FF070B14</color>
+    <color name="bg_window">#FF0A1120</color>
+    <color name="surface_card">#FF111A2B</color>
+    <color name="surface_card_raised">#FF16223A</color>
+    <color name="surface_nav">#FF0B1220</color>
+    <color name="surface_chip">#FF1B2740</color>
+    <color name="surface_scrim">#B3000000</color>
+
+    <!-- ==================================================================
+         Depth tokens (Batch 1).
+
+         The palette above was always navy; what was missing was any
+         distinction between one navy and the next, so every panel read as a
+         single flat slab. These tokens add the two things the design uses to
+         separate layers: a gradient across each surface (lighter at the top,
+         so a card reads as lit from the top-left) and a hairline border that
+         catches the edge against a darker background.
+
+         Both are drawn by Skia as part of the shape drawable — no runtime
+         blur, no RenderEffect, no shader program. On a 1024x600 panel at API
+         23 this costs one extra fill per shape and nothing per frame.
+         ================================================================== -->
+
+    <!-- Top of a card gradient. Slightly lifted from surface_card so a card
+         sitting on bg_root separates without a border doing all the work. -->
+    <color name="surface_card_top">#FF172338</color>
+    <!-- Bottom of the same gradient: the flat card colour it used to be. -->
+    <color name="surface_card_bottom">#FF101828</color>
+
+    <!-- The raised variant (music surface, ETA strip, quick-settings tiles). -->
+    <color name="surface_raised_top">#FF1D2C48</color>
+    <color name="surface_raised_bottom">#FF141D31</color>
+
+    <!-- The navigation bar: darker than any card, so the bar reads as behind
+         the content rather than beside it. -->
+    <color name="surface_nav_top">#FF0D1524</color>
+    <color name="surface_nav_bottom">#FF080D18</color>
+
+    <!-- Card border. Brighter than @color/divider (which is 12% white) because
+         a border on a gradient needs to survive the lighter end of it. -->
+    <color name="surface_card_border">#1F5B7FB8</color>
+    <!-- Border for a selected/elevated surface, tinted with the accent. -->
+    <color name="surface_card_border_active">#663B82F6</color>
+
+    <!-- Screen background wash: a very soft radial-ish lift behind the
+         content, applied by bg_screen.xml. Kept within a few values of
+         bg_root so it never reads as a coloured panel. -->
+    <color name="bg_wash_top">#FF0E1830</color>
+
+    <!-- Accent -->
+    <color name="accent">#FF3B82F6</color>
+    <color name="accent_pressed">#FF2A6FD6</color>
+    <color name="accent_soft">#333B82F6</color>
+    <color name="accent_text">#FF6BA5FF</color>
+    <!-- Accent at the strength of a 1dp hairline on a card. -->
+    <color name="accent_hairline">#803B82F6</color>
+
+    <!-- Text -->
+    <color name="text_primary">#FFF2F6FC</color>
+    <color name="text_secondary">#FFA8B4C8</color>
+    <!--
+      Raised for Batch 1. It was #FF6C7A91, which against the lightest end of
+      the new card gradient (surface_card_top #FF172338) measures about 3.6:1 —
+      under WCAG AA's 4.5:1 for body text, and this token is used for body-sized
+      hint and empty-state text, not for large type. #FF8B9AB3 measures about
+      5.6:1 against the same surface and is visually the same grey family.
+
+      It is still the dimmest of the three text tokens, which is its job; the
+      change is only enough to keep it readable now that cards have a lighter
+      top than the flat surface it was chosen against.
+    -->
+    <color name="text_tertiary">#FF8B9AB3</color>
+    <color name="text_on_accent">#FFFFFFFF</color>
+
+    <!-- Semantic -->
+    <color name="speed_limit_ring">#FFE5383B</color>
+    <color name="speed_limit_fill">#FFFFFFFF</color>
+    <color name="route_line">#FF3B82F6</color>
+    <color name="route_line_casing">#FF0B3A66</color>
+    <color name="nav_muted">#FF9AA6B8</color>
+    <color name="danger">#FFEF4444</color>
+    <color name="success">#FF22C55E</color>
+
+    <!-- Divider -->
+    <color name="divider">#1FFFFFFF</color>
+    <color name="divider_strong">#33FFFFFF</color>
+
+    <!-- Icons -->
+    <color name="icon_inactive">#FF8A97AC</color>
+    <!--
+      The selected bottom-nav item, and only that. Measured off the design
+      sheet: rgb(32,226,252) on Home, rgb(26,218,251) on Navigation,
+      rgb(3,223,253) on Search — three independent panels, so this is the
+      design's nav accent and not a compression artefact.
+
+      It is deliberately NOT @color/accent. The sheet uses three different
+      saturated colours and this project had collapsed them into one:
+        nav active   rgb(32,226,252)  <- this value
+        primary CTA  rgb(1,117,252)   <- @color/accent, already correct
+        media slider rgb(0,163,247)   <- @color/text_tertiary track today
+      Using the accent blue here made the nav read as "the button colour,
+      faded". Splitting the token costs nothing: nav_item_tint is the only
+      consumer, so this changes the bottom bar and nothing else.
+    -->
+    <color name="icon_active">#FF20E2FC</color>
+
+    <!-- Legacy aliases used by AppCompat widgets -->
+    <color name="colorPrimary">@color/accent</color>
+    <color name="colorPrimaryDark">@color/bg_root</color>
+    <color name="colorAccent">@color/accent</color>
+</resources>

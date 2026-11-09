@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The compact top overlay's own surface (§4).
+
+  Not a full status bar: the TS8 vendor bar already draws clock, date, battery
+  and the radios, so repeating any of them here is what §4 forbids. This strip
+  carries only the weather chip, the microphone and the route into Quick
+  Settings.
+
+  It is deliberately semi-transparent and it fades downward, so it floats over
+  a map without cutting the map off with a hard band — a solid bar would hide
+  more of the map than the three controls are worth. The alpha is low enough
+  that a road behind it stays legible.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="#E60D1524"
+        android:centerColor="#990D1524"
+        android:endColor="#00000000"
+        android:type="linear" />
+</shape>

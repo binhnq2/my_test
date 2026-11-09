@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Voice Instant's overlay: one bar, bottom-centre, never a dialog.
+
+  §11 says the overlay must not cover the maneuver card or the navigation. On
+  this panel the maneuver card and the ETA strip sit top-left, the speed chip
+  top-right, so the only region that is clear on *every* screen is the strip
+  just above the bottom navigation. It is also where the driver's hand already
+  is when they reach for the bar, which matters more in a car than symmetry.
+
+  The bar is 320 dp wide rather than full width: at 1024x600 a full-width strip
+  reads as a modal sheet and hides the map row behind it, and the driver is
+  still supposed to be looking at the road.
+
+  Buttons are declared all at once and shown per state. Declaring them
+  conditionally would mean inflating different bar heights for different
+  states, and the bar would jump vertically between LISTENING and CONFIRMING —
+  exactly when the driver's eyes are on it.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="false"
+    android:focusable="false">
+
+    <LinearLayout
+        android:id="@+id/voicePill"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginStart="@dimen/gap"
+        android:layout_marginEnd="@dimen/gap"
+        android:layout_marginBottom="84dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/card_pad"
+        android:paddingEnd="@dimen/gap_small"
+        android:paddingTop="@dimen/gap_small"
+        android:paddingBottom="@dimen/gap_small"
+        android:background="@drawable/bg_card_raised"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="8dp">
+
+        <ImageView
+            android:id="@+id/voiceIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_mic"
+            app:tint="@color/accent_text"
+            android:contentDescription="@string/voice_mic" />
+
+        <!-- `wrap_content` + `maxWidth` rather than 0dp + weight: the pill
+             itself is wrap_content, and a weighted child inside a wrap_content
+             parent measures against an unbounded second pass, which makes the
+             caption jump width between states. -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/gap"
+            android:maxWidth="320dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/voiceTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_body"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="Đang nghe…" />
+
+            <!-- What the recogniser heard, quoted verbatim.
+
+                 This line is what replaced the yes/no prompt. With the
+                 confirmation bar gone nothing else on screen tells the driver
+                 whether the microphone took "dẫn đường tới Cầu Rồng" or
+                 "… tới Cầu Rồng mới", and the command has already run by the
+                 time the outcome line appears. Quoting the transcript is the
+                 only affordance that makes a misrecognition visible, so it is
+                 rendered from `VoiceStateSnapshot.transcript` and never
+                 composed here. -->
+            <TextView
+                android:id="@+id/voiceHeard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_caption"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="Bạn nói: “dẫn đường tới Cầu Rồng”" />
+
+            <!-- The sentence being spoken. Shown because a driver in a noisy
+                 cabin reads it when they cannot hear it. -->
+            <TextView
+                android:id="@+id/voiceCaption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_caption"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="Xác nhận dẫn đường tới Cầu Rồng?" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/voiceActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/gap_small"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/btnVoiceYes"
+                style="@style/Button.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:minWidth="96dp"
+                android:text="@string/voice_confirm_yes"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnVoiceNo"
+                style="@style/Button.Ghost"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginStart="@dimen/gap_small"
+                android:minWidth="80dp"
+                android:text="@string/voice_confirm_no"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnVoiceRetry"
+                style="@style/Button.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:minWidth="96dp"
+                android:text="@string/voice_retry"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btnVoiceSettings"
+                style="@style/Button.Ghost"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:minWidth="96dp"
+                android:text="@string/voice_open_settings"
+                android:visibility="gone" />
+
+            <ImageButton
+                android:id="@+id/btnVoiceClose"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_marginStart="@dimen/gap_small"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_close"
+                app:tint="@color/text_secondary"
+                android:contentDescription="@string/voice_close"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

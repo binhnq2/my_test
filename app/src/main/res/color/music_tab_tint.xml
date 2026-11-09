@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Library tab label colour.
+
+  The tabs are plain TextViews rather than a TabLayout: a TabLayout on this
+  panel brings its own ripple and sliding indicator, and four tabs of one word
+  each are not enough content to justify the dependency. Selection is a state
+  the screen sets with `isSelected`, which both this selector and
+  @drawable/bg_tab_pill read — so the label brightens and the outline appears
+  from the same flag, and the two cannot drift apart.
+
+  Correction: an earlier version of this comment argued the design has no
+  indicator bar. It does. At 5x on the Music panel the selected tab is an
+  outlined rounded rectangle with a brighter underscore inside it, and the
+  three unselected tabs are bare labels. The outline is drawn in bg_tab_pill;
+  the underscore is not reproduced, because it is a 2 px accent line inside a
+  36 dp pill and at 1024x600 it lands under the target density where it reads
+  as a rendering artefact rather than a second element. Recorded in
+  docs/UI_GAP_REPORT.md rather than silently dropped.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true" android:color="@color/accent_text" />
+    <item android:color="@color/text_tertiary" />
+</selector>

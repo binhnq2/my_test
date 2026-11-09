@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The navigation bar over a photograph.
+
+  Same construction as `bg_bottom_nav` — a top-to-bottom gradient and the 1 dp
+  accent hairline — with the two surface colours at 50 % alpha. Parking is the
+  only screen with a full-bleed image behind the bar, and an opaque bar there
+  cuts the photograph in half; a fully transparent one loses the bar's edge
+  against a bright sky.
+
+  The alpha is 0x80, which is the "khoảng 50 %" the driver asked for: the image
+  is clearly visible through the bar while the labels keep enough contrast to
+  read at arm's length. It is a separate drawable rather than `alpha` on the
+  view so the icons and labels stay at full strength — dimming the whole bar
+  would dim the one thing that has to stay legible.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="#800D1524"
+        android:endColor="#80080D18"
+        android:type="linear" />
+    <stroke
+        android:width="@dimen/card_border"
+        android:color="@color/accent_hairline" />
+</shape>

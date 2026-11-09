@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The speed card over the map.
+
+  Was a flat 70% black scrim, which over a map read as a hole punched in the
+  map rather than a panel floating above it — the opposite of what a scrim is
+  for. Two changes:
+
+  * The fill is the raised navy gradient at 88% rather than pure black, so the
+    card belongs to the same family as every other surface in the app while
+    still letting enough of the map through that the driver can tell it is an
+    overlay.
+  * A hairline border draws the edge. Without one, a translucent panel over a
+    light part of the map dissolved into it.
+
+  Alpha is high enough that the speed number stays legible over any map tile;
+  the border is what carries the shape where the fill cannot.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="#E01D2C48"
+        android:endColor="#E0141D31"
+        android:type="linear" />
+    <stroke
+        android:width="@dimen/card_border"
+        android:color="@color/surface_card_border" />
+    <corners android:radius="@dimen/card_radius_small" />
+</shape>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The European speed-limit roundel the design draws: a thick red ring with a
+     white field. Drawn, not shipped as a PNG, so it stays crisp at any density
+     and its colour stays tied to the palette token. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/speed_limit_fill" />
+    <stroke android:width="7dp" android:color="@color/speed_limit_ring" />
+</shape>

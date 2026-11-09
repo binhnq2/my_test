@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      MusicCardView has two shapes in the design: the full card on Home and the
+      short strip on the Navigation screen, where the maneuver card and the ETA
+      strip need the vertical space more than the transport row does.
+
+      It is one view with one attribute rather than two classes because the two
+      shapes share every binding — same artwork, same title, same progress, same
+      transport — and a second class would be a copy that drifts. The attribute
+      only decides which secondary row is inflated.
+    -->
+    <declare-styleable name="MusicCardView">
+        <attr name="musicCompact" format="boolean" />
+    </declare-styleable>
+
+    <!--
+      One quick-settings tile. The icon and the label are declared in XML so the
+      tile is described where it is placed; the *value* line ("Bật" / "Tắt") is
+      never declared, because it is platform state and an XML default would be a
+      claim the app has not read yet.
+    -->
+    <declare-styleable name="QsTileView">
+        <attr name="qsIcon" format="reference" />
+        <attr name="qsLabel" format="reference" />
+    </declare-styleable>
+</resources>

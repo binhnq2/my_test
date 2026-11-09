@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A standard content card.
+
+  Was a flat `@color/surface_card` fill with a corner radius and nothing else,
+  which is why the whole UI read as one dark slab: a card, the panel behind it
+  and the bar below it were three values within a few points of each other with
+  no edge between them.
+
+  Now three things separate it from what is behind it, in order of how much
+  they do at arm's length on a 1024x600 panel:
+
+  1. A vertical gradient from surface_card_top to surface_card_bottom. The
+     lighter end is at the top, so the card reads as lit from above — the same
+     direction the design's own panels are lit.
+  2. A 1dp border. On a gradient the border is what actually draws the edge;
+     the gradient alone would still bleed into bg_root at the bottom.
+  3. The corner radius, unchanged at @dimen/card_radius.
+
+  All three are drawn by Skia as part of the shape. There is no blur, no
+  RenderEffect and no shader program here, and a shape is rasterised once per
+  size per density by the platform's drawable cache — so this adds no per-frame
+  work on the TS8.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="@color/surface_card_top"
+        android:endColor="@color/surface_card_bottom"
+        android:type="linear" />
+    <stroke
+        android:width="@dimen/card_border"
+        android:color="@color/surface_card_border" />
+    <corners android:radius="@dimen/card_radius" />
+</shape>

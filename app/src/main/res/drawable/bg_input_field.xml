@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A text field on a card.
+
+  Rounder than the card's own corner and stroked with `divider_strong`, so an
+  empty field still reads as an input on a 1024×600 panel where a 1 px divider
+  all but disappears at arm's length. The search field on the music screen uses
+  the pill variant (`bg_search_field`); this one is the settings form variant,
+  where four stacked fields at 26 dp radius would look like four buttons.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/surface_card_raised" />
+    <stroke android:width="1dp" android:color="@color/divider_strong" />
+    <corners android:radius="8dp" />
+</shape>

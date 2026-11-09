@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Navigation — design states 2 and 3.
+
+  The map is full-bleed under the chrome so the road ahead has the most pixels
+  the panel can give it. Everything else sits in one of four overlays, and each
+  one is shown by exactly one navigation state (see `MapActivity.render`):
+
+  * the maneuver card, top-left, only while guiding;
+  * the green ETA strip under it, only while guiding;
+  * the destination card, bottom, only while previewing a route;
+  * the compact music strip, right, which is the design's small card.
+
+  The compact card uses the same `MusicCardView` as Home with `musicCompact`,
+  so a change to the card cannot make the two screens disagree.
+
+  There is no speed-limit roundel drawn permanently: it appears only when the
+  map pack actually carries a limit for the current road. The design shows 60;
+  this pack does not, and inventing it is forbidden. See KNOWN_LIMITATIONS.md.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <!-- The map fills the panel, top to nav bar. It goes *under* the
+         compact overlay rather than starting below it: the overlay's background
+         fades to fully transparent at its bottom edge, so a map that runs to
+         the top of the screen reads as a panel with controls floating on it
+         instead of a panel with a band cut off the top.
+
+         It stays full-bleed on purpose, including under the music card. §5's
+         non-overlap rule is about the *controls*: "maneuver/overview/mute/end
+         route luôn hiển thị và bấm được". Resizing the map instead would make
+         the renderer re-lay-out and re-centre the camera the moment guidance
+         starts — a visible jump on a panel the driver is steering by — so the
+         card is kept as an overlay and the one control column it used to cover
+         is constrained out from under it. See `guidanceControls` below. -->
+    <FrameLayout
+        android:id="@+id/mapHost"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/surface_card"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- ============================================================
+             The map shell's six phases and its failure surface (§6).
+
+             Replaces the bare `mapPlaceholder` sentence this screen used to
+             show. The old message had no action on it, so a driver whose pack
+             was in the wrong folder had no way from this screen to find out
+             which folder, let alone fix it. The include draws a progress line
+             while the renderer is starting and, on failure, the reason, the
+             error code, the active pack and the three actions that can change
+             the outcome.
+
+             It is a child of `mapHost` and index-ordered above the MapView
+             (which the host inserts at index 0), so it covers a blank renderer
+             without hiding any chrome that sits on the screen's own layer.
+             ============================================================ -->
+        <include
+            android:id="@+id/mapPhase"
+            layout="@layout/view_map_phase"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- ============================================================
+             Top-left stack: the maneuver card and the ETA strip under it.
+
+             They live in one vertical container rather than each being
+             placed by `layout_below`, because the card's height is
+             `wrap_content` and depends on whether the "sau đó" line is
+             shown. A fixed offset would leave a gap on some maneuvers and
+             overlap the card on others.
+
+             `layout_marginTop` clears the compact top overlay. That strip is
+             a sibling of `mapHost` declared later in this file, so it draws on
+             top of everything inside the map — including this card — and its
+             gradient starts at 90 % opacity. At the old 12dp margin the
+             distance line sat under roughly 60 % of a near-black scrim and
+             read as grey instead of white. The inset is the overlay's own
+             height, which is exactly where the gradient reaches transparent,
+             so the card starts below the scrim rather than behind it.
+             ============================================================ -->
+        <LinearLayout
+            android:id="@+id/topLeftStack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:layout_marginStart="@dimen/gap"
+            android:layout_marginTop="@dimen/top_overlay_height"
+            android:layout_marginEnd="@dimen/gap"
+            android:layout_marginBottom="@dimen/gap"
+            android:orientation="vertical">
+
+        <!-- Maneuver card. Top-left, the design's largest element when
+             guiding: distance on top, instruction under it, then the
+             "sau đó" preview line.
+             ============================================================ -->
+        <LinearLayout
+            android:id="@+id/maneuverCard"
+            android:layout_width="@dimen/maneuver_card_width"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:orientation="horizontal"
+            android:padding="@dimen/card_pad"
+            android:background="@drawable/bg_card_raised"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/maneuverIcon"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/ic_maneuver_straight"
+                app:tint="@color/accent"
+                android:contentDescription="@null" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/gap"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/maneuverDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_headline"
+                    android:fontFamily="sans-serif-medium"
+                    android:includeFontPadding="false"
+                    tools:text="300 m" />
+
+                <TextView
+                    android:id="@+id/maneuverInstruction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_title"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    tools:text="Rẽ phải vào Nguyễn Văn Linh" />
+
+                <TextView
+                    android:id="@+id/maneuverThen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_caption"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Sau đó → Cầu Tân Thuận" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ============================================================
+             ETA strip. Green when a route is active, because that is the
+             one number the driver checks at a light.
+             ============================================================ -->
+        <TextView
+            android:id="@+id/etaStrip"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/eta_strip_height"
+            android:layout_marginTop="@dimen/gap_small"
+            android:paddingStart="@dimen/card_pad"
+            android:paddingEnd="@dimen/card_pad"
+            android:gravity="center_vertical"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_body"
+            android:background="@drawable/bg_eta_strip"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="12 phút • 6,2 km • Đến 17:36" />
+
+        </LinearLayout>
+
+        <!-- ============================================================
+             Speed chip and the speed-limit roundel, bottom-left.
+
+             The design puts the pair at the bottom of the map, left of
+             centre, side by side: the chip is a rounded navy card, the
+             roundel sits immediately to its right on the same baseline.
+             Measured on the Navigation panel — chip left edge x~782, roundel
+             centred x~915, both bottoms on y~285 in sheet coordinates.
+
+             This project had both at `top|end`, which put them under the
+             status bar in the opposite corner from the design. They also sat
+             in two separate FrameLayout children, so the roundel needed a
+             hand-tuned 96dp margin to clear the chip. A single horizontal
+             container removes that coupling: the roundel's position is a
+             consequence of the chip's width instead of a number that has to
+             be re-tuned whenever the chip changes.
+
+             Hidden independently — the chip needs only a speed, the roundel
+             needs a limit from the pack for the current road.
+
+             `map_search_field_clearance` keeps the pair above the full-width
+             search field. Before that the field was drawn over the bottom half
+             of the chip and the roundel, which is what "search đè lên tốc độ"
+             looks like on the panel. `MapActivity.syncSpeedCluster` also hides
+             the pair while the destination card owns this corner.
+             ============================================================ -->
+        <LinearLayout
+            android:id="@+id/speedCluster"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="@dimen/gap"
+            android:layout_marginTop="@dimen/gap"
+            android:layout_marginEnd="@dimen/gap"
+            android:layout_marginBottom="@dimen/map_search_field_clearance"
+            android:orientation="horizontal"
+            android:gravity="bottom|start">
+
+            <LinearLayout
+                android:id="@+id/speedChip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:minWidth="72dp"
+                android:padding="@dimen/gap_small"
+                android:background="@drawable/bg_speed_card"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:id="@+id/speedValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_display"
+                    android:includeFontPadding="false"
+                    android:text="0" />
+
+                <TextView
+                    android:id="@+id/speedUnit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_title"
+                    android:text="@string/home_speed_unit" />
+            </LinearLayout>
+
+            <!-- Real limit only; hidden when the pack has none for this road. -->
+            <FrameLayout
+                android:id="@+id/speedLimit"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="@dimen/gap_small"
+                android:layout_marginBottom="@dimen/gap_small"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg_speed_limit" />
+
+                <TextView
+                    android:id="@+id/speedLimitValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/speed_limit_ring"
+                    android:textSize="@dimen/text_title"
+                    android:textStyle="bold"
+                    tools:text="60" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- ============================================================
+             Driving controls, right edge: mute, overview, end (§5).
+
+             These three must stay visible and tappable in every guidance
+             state, and they sit in the one strip the compact music card also
+             occupies. `layout_marginEnd` is therefore the card's full width
+             plus its own margin (`map_controls_reserve`, 236 + 12 = 248 dp): the
+             column's right edge lands exactly where the card's left edge
+             begins, so no button is ever underneath it.
+
+             It applies unconditionally rather than only while guiding. The
+             card is `gone` in browse, where this column is `gone` too, so the
+             extra inset costs nothing visible — and a conditional value cannot
+             be expressed in a layout anyway, which is why this is a static
+             number asserted by `MapCompositionTest` rather than a margin set
+             at runtime. -->
+        <LinearLayout
+            android:id="@+id/guidanceControls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:layout_marginStart="@dimen/gap"
+            android:layout_marginTop="@dimen/gap"
+            android:layout_marginEnd="@dimen/map_controls_reserve"
+            android:layout_marginBottom="@dimen/gap"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageButton
+                android:id="@+id/btnMute"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_volume"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/nav_mute" />
+
+            <ImageButton
+                android:id="@+id/btnOverview"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:layout_marginTop="@dimen/gap_small"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_expand"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/nav_overview" />
+
+            <ImageButton
+                android:id="@+id/btnEnd"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:layout_marginTop="@dimen/gap_small"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_close"
+                app:tint="@color/danger"
+                android:contentDescription="@string/nav_end" />
+        </LinearLayout>
+
+        <!-- Free-navigation controls: settings, recentre, zoom in, zoom out.
+
+             `map_search_field_clearance` lifts the whole column above the search
+             field, which is drawn later in this FrameLayout and therefore sits
+             on top of anything it overlaps. The field is 48 dp tall with a 12 dp
+             margin, so a column pinned to the bottom edge lost its lowest button
+             — zoom out — under the field's right end, exactly where the
+             microphone sits. 72 dp is 12 + 48 + a 12 dp gap.
+
+             **Do not shorten this to `android:layout_margin` plus one specific
+             margin.** `ViewGroup.MarginLayoutParams` applies the generic
+             `layout_margin` to all four sides *instead of* reading the specific
+             ones, so `layout_margin="@dimen/gap"` silently discarded the
+             `layout_marginBottom` that was here and all four buttons landed back
+             on the search field. Every child of this FrameLayout that needs a
+             side-specific margin spells out all four. -->
+        <LinearLayout
+            android:id="@+id/browseControls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginStart="@dimen/gap"
+            android:layout_marginTop="@dimen/gap"
+            android:layout_marginEnd="@dimen/gap"
+            android:layout_marginBottom="@dimen/map_search_field_clearance"
+            android:orientation="vertical">
+
+            <!-- Map Management, reachable at any time the map is drawing.
+
+                 Before this button existed the only `Cài đặt bản đồ` control on
+                 either map screen was the one inside `view_map_phase.xml`, and
+                 `MapPhaseSurface.render` sets that whole surface `GONE` the
+                 moment the store reaches READY. So a map that loaded correctly
+                 — the normal case — had no way into Map Management at all, and
+                 a driver who wanted to switch packs had to find Quick Settings
+                 first. This one is not state-driven: it is drawn whenever the
+                 browse controls are, and `applyControlVisibility` never hides
+                 it (it is not part of the `Hiển thị` zoom/recentre group). -->
+            <ImageButton
+                android:id="@+id/btnMapSettings"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/map_error_open_management" />
+
+            <ImageButton
+                android:id="@+id/btnRecenter"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_compass"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/home_recenter" />
+
+            <ImageButton
+                android:id="@+id/btnZoomIn"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:layout_marginTop="@dimen/gap_small"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_plus"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/home_zoom_in" />
+
+            <ImageButton
+                android:id="@+id/btnZoomOut"
+                android:layout_width="@dimen/map_control_size"
+                android:layout_height="@dimen/map_control_size"
+                android:layout_marginTop="@dimen/gap_small"
+                android:background="@drawable/bg_circle_control"
+                android:src="@drawable/ic_minus"
+                app:tint="@color/text_primary"
+                android:contentDescription="@string/home_zoom_out" />
+        </LinearLayout>
+
+        <!-- ============================================================
+             Destination / route preview card, bottom-left.
+             ============================================================ -->
+        <LinearLayout
+            android:id="@+id/destinationCard"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="@dimen/gap"
+            android:orientation="vertical"
+            android:padding="@dimen/card_pad"
+            android:background="@drawable/bg_card_raised"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/destinationName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_title"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"
+                tools:text="Cầu Rồng" />
+
+            <TextView
+                android:id="@+id/destinationSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_body"
+                tools:text="6,2 km • khoảng 12 phút" />
+
+            <TextView
+                android:id="@+id/destinationMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/danger"
+                android:textSize="@dimen/text_caption"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="Không có lộ trình lái xe tới điểm này." />
+
+            <!-- Route choices. Filled at runtime by `renderRouteOptions`: one
+                 row per candidate, fastest first, with the selected one marked.
+                 Hidden when the graph produced only one corridor, because a
+                 list of one is not a choice. -->
+            <LinearLayout
+                android:id="@+id/routeOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnStart"
+                    style="@style/Button.Primary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/nav_start_navigation" />
+
+                <Button
+                    android:id="@+id/btnCancelPreview"
+                    style="@style/Button.Ghost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/gap_small"
+                    android:text="@string/nav_cancel" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Search entry while idle: tap opens the search screen. -->
+        <LinearLayout
+            android:id="@+id/searchField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/map_search_field_height"
+            android:layout_gravity="bottom"
+            android:layout_margin="@dimen/gap"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/gap"
+            android:paddingEnd="@dimen/gap_small"
+            android:background="@drawable/bg_search_field">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_search"
+                app:tint="@color/text_tertiary"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/gap_small"
+                android:textColor="@color/text_tertiary"
+                android:textSize="@dimen/text_body"
+                android:text="@string/search_hint" />
+
+            <ImageButton
+                android:id="@+id/btnVoice"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="@dimen/gap_small"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_mic"
+                app:tint="@color/text_secondary"
+                android:contentDescription="@string/voice_mic" />
+        </LinearLayout>
+
+        <!-- Transient banner for states with no card: calculating, rerouting,
+             arrival. Text is set by the Activity from the state itself.
+             Inset below the top overlay for the same reason as the maneuver
+             card: it is drawn under that strip and would be dimmed by it. -->
+        <TextView
+            android:id="@+id/stateBanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginTop="@dimen/top_overlay_height"
+            android:paddingStart="@dimen/card_pad"
+            android:paddingEnd="@dimen/card_pad"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@drawable/bg_chip"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_body"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="@string/nav_calculating" />
+
+        <!-- Traffic-sign proximity alert card. Shows the approaching sign's
+             icon and distance when a traffic sign/camera is within alert range.
+             Positioned at the top-right so it does not collide with the
+             maneuver card (top-left) or the guidance controls (right edge). -->
+        <LinearLayout
+            android:id="@+id/trafficAlertCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_marginTop="@dimen/top_overlay_height"
+            android:layout_marginEnd="@dimen/gap"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/card_pad"
+            android:paddingEnd="@dimen/card_pad"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="@drawable/bg_chip"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/trafficAlertIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginEnd="6dp"
+                android:scaleType="fitCenter"
+                tools:src="@drawable/ic_speed_limit" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/trafficAlertLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_body"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    tools:text="Camera phạt nguội" />
+
+                <TextView
+                    android:id="@+id/trafficAlertDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/danger"
+                    android:textSize="@dimen/text_caption"
+                    tools:text="250 m" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Compact music strip, the design's small card on the navigation screen.
+         §5: this card is part of the NAVIGATION composition only. Map Browse is
+         a full-width map and shows no card at all — MapActivity.render decides
+         which of the two it is drawing, and the constraint set here is what
+         keeps the card from ever covering the guidance controls: it is pinned
+         to the panel's right edge under the overlay and above the nav bar, and
+         the guidance controls are pinned to the left column. -->
+    <com.ts8.launcher.ui.MusicCardView
+        android:id="@+id/musicCard"
+        android:layout_width="@dimen/music_card_width_compact"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/gap_small"
+        android:layout_marginEnd="@dimen/gap"
+        android:layout_marginBottom="@dimen/gap_small"
+        app:musicCompact="true"
+        app:layout_constraintTop_toBottomOf="@id/statusBar"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        tools:visibility="gone" />
+
+    <!-- ================================================================
+         Compact top overlay (§4), drawn last so it sits above the map.
+
+         Only the microphone and Quick Settings: Home's variant also carries a
+         weather chip, but over a live map the chip would compete with the
+         maneuver card for the same corner, and weather is the least urgent of
+         the three. CompactTopBar.compactOnly is what strips it.
+         ================================================================ -->
+    <com.ts8.launcher.ui.CompactTopBar
+        android:id="@+id/statusBar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/top_overlay_height"
+        android:background="@drawable/bg_top_overlay"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.ts8.launcher.ui.BottomNavView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

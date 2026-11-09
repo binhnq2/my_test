@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The status row the design puts at the top of every screen.
+
+  Left: clock and date, the two things a driver glances at.
+  Right: connectivity icons and the "Đà Nẵng 28°C" chip.
+
+  The weather chip is the one element the design shows that this launcher
+  cannot truthfully fill. The spec forbids mock data standing in for a
+  production result, and a fabricated temperature is exactly that, so the chip
+  is hidden until a real reading exists. There is no weather provider in this
+  campaign (the spec lists weather widgets as out of scope), so in practice it
+  stays hidden — which is the honest outcome, not a gap to paper over.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/statusRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/screen_pad"
+        android:paddingEnd="@dimen/screen_pad"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
+
+        <TextView
+            android:id="@+id/clockText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_title"
+            android:fontFamily="sans-serif-medium"
+            android:text="--:--" />
+
+        <TextView
+            android:id="@+id/dateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            android:text="" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <!-- Reserved for a real provider; hidden by default, see the note above. -->
+        <TextView
+            android:id="@+id/weatherChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            android:visibility="gone"
+            tools:ignore="HardcodedText"
+            android:text="" />
+
+        <!-- The radio icons double as the Quick Settings entry point, which is
+             the idiom every head unit on this panel uses: the driver taps the
+             row of icons they were already looking at. The row is its own
+             clickable child so a tap on the clock is not swallowed by it. -->
+        <LinearLayout
+            android:id="@+id/statusIcons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingStart="8dp"
+            android:paddingEnd="4dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:background="?attr/selectableItemBackgroundBorderless">
+
+            <ImageView
+                android:id="@+id/iconSignal"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_signal"
+                app:tint="@color/text_tertiary"
+                android:contentDescription="@string/qs_mobile_data" />
+
+            <ImageView
+                android:id="@+id/iconWifi"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_wifi"
+                app:tint="@color/text_tertiary"
+                android:contentDescription="@string/qs_wifi" />
+
+            <ImageView
+                android:id="@+id/iconBluetooth"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_bluetooth"
+                app:tint="@color/text_tertiary"
+                android:contentDescription="@string/qs_bluetooth" />
+
+            <ImageView
+                android:id="@+id/iconBattery"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/ic_battery"
+                app:tint="@color/text_tertiary"
+                android:contentDescription="@string/qs_title" />
+        </LinearLayout>
+    </LinearLayout>
+</merge>

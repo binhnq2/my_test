@@ -1,0 +1,1 @@
+C:\Users\AD\AppData\Local\Android\Sdk\platform-tools\adb.exe install -r "D:\Projects\Ts8_Launcher\TS8CarLauncher\app\build\outputs\apk\debug\app-debug.apk"

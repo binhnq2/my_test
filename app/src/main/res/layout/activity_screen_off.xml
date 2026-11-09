@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  An all-black surface.
+
+  `PowerManager.goToSleep` needs the DEVICE_POWER signature permission, so a
+  third-party launcher cannot dim the panel. What it can do is cover it: a black
+  window at full screen with the navigation bar hidden. Playback and navigation
+  keep running underneath, which is the point — the driver wants the light off
+  during a night stop, not the music.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/screenOffRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:keepScreenOn="false">
+</FrameLayout>

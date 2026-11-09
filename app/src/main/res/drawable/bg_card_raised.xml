@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A card that sits above another card: the music surface, the quick-settings
+  tiles, the ETA strip.
+
+  Same construction as @drawable/bg_card but one step brighter, so the two
+  layers are distinguishable when one is drawn inside the other. Before Batch 1
+  both were flat solids eleven points apart, which is below the threshold where
+  a panel reads as "on top of" another at arm's length.
+
+  The border is the same hairline; the gradient carries the difference.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="@color/surface_raised_top"
+        android:endColor="@color/surface_raised_bottom"
+        android:type="linear" />
+    <stroke
+        android:width="@dimen/card_border"
+        android:color="@color/surface_card_border" />
+    <corners android:radius="@dimen/card_radius" />
+</shape>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Parking backdrop: a vertical ramp from near-black at the top to a deep blue
+  at the bottom, which is what the design's dusk photograph reads as once it is
+  reduced to something the app can legally ship.
+
+  A gradient rather than a bundled photo, deliberately. The design's image is a
+  licensed photograph; drawing a mountain silhouette to imitate it would be a
+  fake asset presented as the real one. A gradient makes no claim at all.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="@color/bg_root"
+        android:centerColor="@color/bg_window"
+        android:endColor="#FF122440"
+        android:type="linear" />
+</shape>

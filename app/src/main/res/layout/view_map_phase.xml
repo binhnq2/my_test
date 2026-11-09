@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The map shell's progress and failure surface (§6), shared by Home and Map.
+
+  **Why one layout and not two.** §6 requires the same six phases, the same
+  error code, the same active-pack line and the same three actions on both
+  screens. Two copies would be two places to update when one of them is wrong,
+  and the one that was forgotten is the one the driver sees.
+
+  **Why this is not just a message.** A map that is not drawing must not be a
+  white rectangle, and it must not be a sentence either — a sentence with no
+  action leaves the driver with nothing to do but reboot. The three buttons are
+  the three things that can actually change the outcome, and each is wired to
+  a real destination:
+
+  * `Thử lại` re-runs the pack lookup and the renderer start.
+  * `Cài đặt bản đồ` opens Map Management, which is the screen that imports,
+    validates, activates and removes packs.
+  * `Chi tiết` opens the detail dialog with the raw reason, because the
+    one-line message is deliberately short enough to read at a glance.
+
+  **Why the progress half and the failure half are separate groups.** They are
+  mutually exclusive by construction — one is shown while `isBusy`, the other
+  when `isFailed` — and keeping them as two children of one container means the
+  screen flips one visibility rather than composing text.
+
+  **Why the root is a `FrameLayout` and not `<merge>`.** `<merge>` reads like
+  the tidier choice — it saves a level of hierarchy — but it silently breaks
+  the `include` id, and the whole shell depends on that id. `LayoutInflater
+  .parseInclude` has a branch for a `<merge>` root that calls `rInflate` and
+  jumps straight to `close()`: it never reaches the code that applies the
+  `<include>` tag's `android:id`, its `LayoutParams` or its visibility. The
+  merge element is dropped and its children are appended to the parent, so no
+  view in the resulting tree carries `R.id.mapPhase`. Both screens call
+  `findViewById(R.id.mapPhase)` and hand the result to `MapPhaseSurface`, whose
+  `root` parameter is non-null — so the lookup returning null is an NPE thrown
+  from `onCreate`, on every API level. Verified in the API 23 bytecode (offset
+  321: `"merge".equals(name)` → `rInflate` → `goto 520`, skipping the `setId`
+  at 448) and it is still the case in current AOSP. The extra `match_parent`
+  wrapper costs one view and keeps the id working.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- ============ progress: INITIALIZING … WAITING_FIRST_FRAME ============ -->
+    <LinearLayout
+        android:id="@+id/mapPhaseProgress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ProgressBar
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:indeterminateTint="@color/accent" />
+
+        <TextView
+            android:id="@+id/mapPhaseProgressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_small"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:gravity="center"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_body"
+            android:text="@string/map_phase_initializing" />
+
+        <!-- The pack the shell is trying, so a failure does not then have to
+             introduce a name the driver has not seen. -->
+        <TextView
+            android:id="@+id/mapPhasePackText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:gravity="center"
+            android:textColor="@color/text_tertiary"
+            android:textSize="@dimen/text_micro"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:text="Gói đang dùng: Đà Nẵng v1" />
+    </LinearLayout>
+
+    <!-- ============ FAILED ============ -->
+    <LinearLayout
+        android:id="@+id/mapPhaseError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingStart="@dimen/screen_pad"
+        android:paddingEnd="@dimen/screen_pad"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_warning"
+            app:tint="@color/danger"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_small"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_headline"
+            android:textStyle="bold"
+            android:text="@string/map_error_title" />
+
+        <!-- The reason, from the layer that failed. Never composed here: the
+             pack loader knows whether a directory was missing, unreadable, or
+             had a bad manifest, and MapLibre knows why the style was rejected. -->
+        <TextView
+            android:id="@+id/mapPhaseErrorDetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_body"
+            tools:text="Không tìm thấy gói bản đồ trong /sdcard/ts8/map-pack" />
+
+        <TextView
+            android:id="@+id/mapPhaseErrorCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_small"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:background="@drawable/bg_chip"
+            android:textColor="@color/text_tertiary"
+            android:textSize="@dimen/text_micro"
+            tools:text="Mã lỗi: MAP_NO_PACK" />
+
+        <TextView
+            android:id="@+id/mapPhaseErrorPack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_tertiary"
+            android:textSize="@dimen/text_micro"
+            tools:text="Gói đang dùng: chưa có" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/btnMapRetry"
+                style="@style/Button.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="112dp"
+                android:text="@string/music_online_retry" />
+
+            <Button
+                android:id="@+id/btnMapManage"
+                style="@style/Button.Ghost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/gap_small"
+                android:text="@string/map_error_open_management" />
+
+            <Button
+                android:id="@+id/btnMapDetails"
+                style="@style/Button.Ghost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/gap_small"
+                android:text="@string/map_error_details" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

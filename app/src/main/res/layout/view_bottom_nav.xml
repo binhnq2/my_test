@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The single navigation bar. Every screen includes this one file.
+
+  Two rules from the spec are enforced structurally here rather than by
+  convention:
+
+  * There is **no left menu anywhere**. A drawer would have to be added to a
+    screen's own layout, and no screen's layout has one; this bar is the only
+    way to change screen.
+  * The order is fixed to Home | Map | Music | Phone | Apps, so the driver's
+    muscle memory works on every screen.
+
+  `Phone` is part of the required bar but has no screen of its own: it opens
+  the dialer, which is what the design's phone icon means on a head unit. It is
+  an item here rather than a separate screen so the bar stays identical
+  everywhere.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--
+      The bar has no id of its own: the enclosing BottomNavView carries
+      `@+id/bottomNav`, and giving the inner row the same id would make
+      `findViewById` ambiguous and the lint check fail on a duplicate id.
+    -->
+    <LinearLayout
+        android:id="@+id/navBarSurface"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_nav_height"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_bottom_nav"
+        android:elevation="8dp">
+
+        <LinearLayout
+            android:id="@+id/navHome"
+            style="@style/BottomNavItem">
+
+            <ImageView
+                android:id="@+id/navHomeIcon"
+                style="@style/BottomNavIcon"
+                android:src="@drawable/ic_nav_home"
+                android:contentDescription="@string/nav_home" />
+
+            <TextView
+                android:id="@+id/navHomeLabel"
+                style="@style/BottomNavLabel"
+                android:text="@string/nav_home" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navMap"
+            style="@style/BottomNavItem">
+
+            <ImageView
+                android:id="@+id/navMapIcon"
+                style="@style/BottomNavIcon"
+                android:src="@drawable/ic_nav_map"
+                android:contentDescription="@string/nav_map" />
+
+            <TextView
+                android:id="@+id/navMapLabel"
+                style="@style/BottomNavLabel"
+                android:text="@string/nav_map" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navMusic"
+            style="@style/BottomNavItem">
+
+            <ImageView
+                android:id="@+id/navMusicIcon"
+                style="@style/BottomNavIcon"
+                android:src="@drawable/ic_nav_music"
+                android:contentDescription="@string/nav_music" />
+
+            <TextView
+                android:id="@+id/navMusicLabel"
+                style="@style/BottomNavLabel"
+                android:text="@string/nav_music" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navPhone"
+            style="@style/BottomNavItem">
+
+            <ImageView
+                android:id="@+id/navPhoneIcon"
+                style="@style/BottomNavIcon"
+                android:src="@drawable/ic_nav_phone"
+                android:contentDescription="@string/nav_phone" />
+
+            <TextView
+                android:id="@+id/navPhoneLabel"
+                style="@style/BottomNavLabel"
+                android:text="@string/nav_phone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/navApps"
+            style="@style/BottomNavItem">
+
+            <ImageView
+                android:id="@+id/navAppsIcon"
+                style="@style/BottomNavIcon"
+                android:src="@drawable/ic_nav_apps"
+                android:contentDescription="@string/nav_apps" />
+
+            <TextView
+                android:id="@+id/navAppsLabel"
+                style="@style/BottomNavLabel"
+                android:text="@string/nav_apps" />
+        </LinearLayout>
+
+        <!--
+          Volume stepper. The design shows a speaker with a value to either
+          side; that value is the media stream level, not a climate setpoint.
+          The launcher does not draw a temperature control: on this head unit
+          the HVAC is owned by the CANBUS app with no public API, and the spec
+          forbids presenting a control that cannot actually act.
+        -->
+        <LinearLayout
+            android:id="@+id/navVolume"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="8dp"
+            android:paddingEnd="4dp">
+
+            <ImageView
+                android:id="@+id/volDown"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:src="@drawable/ic_minus"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/icon_inactive"
+                android:contentDescription="@string/qs_volume" />
+
+            <ImageView
+                android:id="@+id/volIcon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:padding="3dp"
+                android:src="@drawable/ic_volume"
+                app:tint="@color/text_secondary"
+                android:contentDescription="@string/qs_volume" />
+
+            <TextView
+                android:id="@+id/volLabel"
+                android:layout_width="44dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_body"
+                android:text="0" />
+
+            <ImageView
+                android:id="@+id/volUp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:padding="10dp"
+                android:src="@drawable/ic_plus"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:tint="@color/icon_inactive"
+                android:contentDescription="@string/qs_volume" />
+
+            <ImageView
+                android:id="@+id/btnVoice"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:padding="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_mic"
+                app:tint="@color/text_secondary"
+                android:contentDescription="@string/overlay_voice" />
+
+            <ImageView
+                android:id="@+id/btnQuickSettings"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:padding="9dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/text_secondary"
+                android:contentDescription="@string/overlay_quick_settings" />
+        </LinearLayout>
+    </LinearLayout>
+</merge>

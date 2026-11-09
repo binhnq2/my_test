@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Diagnostics (§11).
+
+  Not one of the design's seven states: it is the screen a driver reads out
+  loud when something is wrong, and the source of the text file they can hand
+  to support. Reached from Settings; Back returns there.
+
+  **One column, scrolling.** Every row here is a label and a value, and the
+  set grows as more subsystems gain a line to report. A two-column grid would
+  have to be re-thought the first time a value needs three words, and the driver
+  reads this page top to bottom anyway.
+
+  **The rows are built in code, not laid out here.** They come from the same
+  [DiagnosticsReport] the export writes, so a fact cannot exist on screen and
+  be missing from the file (or the reverse) — which is the failure mode of a
+  diagnostics page that was written twice. What is in this file is the frame:
+  the title, the scroll area, the export action and its result line.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <!-- §4: no launcher status row here either; the back button takes the
+         top-left and is inset past the vendor bar. -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="@dimen/gap_small"
+        android:layout_marginTop="@dimen/vendor_bar_inset"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_chevron_left"
+        app:tint="@color/text_secondary"
+        android:contentDescription="@string/generic_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/diagnosticsTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/gap_small"
+        android:layout_marginEnd="@dimen/screen_pad"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_title"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/diagnostics_title"
+        app:layout_constraintTop_toTopOf="@id/btnBack"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ScrollView
+        android:id="@+id/diagnosticsScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/gap_small"
+        android:layout_marginBottom="@dimen/gap_small"
+        android:paddingStart="@dimen/screen_pad"
+        android:paddingEnd="@dimen/screen_pad"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/diagnosticsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card" />
+
+            <!-- §11: "Export diagnostics tạo file text ở vị trí người dùng
+                 truy cập được." The path is shown after the write, because a
+                 file the driver cannot find is the same as no export. -->
+            <Button
+                android:id="@+id/btnExport"
+                style="@style/Button.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:text="@string/diagnostics_export" />
+
+            <TextView
+                android:id="@+id/exportResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingEnd="@dimen/gap_small"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_micro"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="Đã lưu: /storage/emulated/0/Download/ts8-diagnostics.txt" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingEnd="@dimen/gap_small"
+                android:paddingBottom="@dimen/gap"
+                android:textColor="@color/text_tertiary"
+                android:textSize="@dimen/text_micro"
+                android:text="@string/diagnostics_export_hint" />
+        </LinearLayout>
+    </ScrollView>
+
+    <com.ts8.launcher.ui.BottomNavView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

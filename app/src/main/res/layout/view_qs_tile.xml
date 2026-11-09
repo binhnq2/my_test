@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The contents of one quick-settings tile, inflated by `QsTileView`.
+
+  A `<merge>` because the view itself is the row: an extra wrapper inside would
+  cost a measure pass per tile on a device that already fights for frames, and
+  the tiles are the first thing drawn on this screen.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/tileIcon"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:contentDescription="@null" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="@dimen/gap"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tileLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_body"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Wi-Fi" />
+
+        <TextView
+            android:id="@+id/tileValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/text_tertiary"
+            android:textSize="@dimen/text_caption"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Bật" />
+    </LinearLayout>
+</merge>

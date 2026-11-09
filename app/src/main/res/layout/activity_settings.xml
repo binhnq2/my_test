@@ -1,0 +1,746 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Settings.
+
+  Not one of the design's seven states — it is reachable from Quick Settings and
+  holds the things that do not fit a tile: which map pack is installed, whether
+  each permission is granted, and the attribution the map data requires.
+
+  Every row is either a real, working action or a real, readable fact. There is
+  no row for anything the launcher cannot do.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <!-- §4: no launcher status row on Settings; the back button takes its
+         place at the top-left, inset past the vendor bar. -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="@dimen/gap_small"
+        android:layout_marginTop="@dimen/vendor_bar_inset"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_chevron_left"
+        app:tint="@color/text_secondary"
+        android:contentDescription="@string/generic_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/settingsTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/gap_small"
+        android:layout_marginEnd="@dimen/screen_pad"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_title"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/qs_settings"
+        app:layout_constraintTop_toTopOf="@id/btnBack"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ScrollView
+        android:id="@+id/settingsScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/gap_small"
+        android:layout_marginBottom="@dimen/gap_small"
+        android:paddingStart="@dimen/screen_pad"
+        android:paddingEnd="@dimen/screen_pad"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- ===== map pack ===== -->
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/settings_section_map" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card">
+
+                <TextView
+                    android:id="@+id/packName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_body"
+                    tools:text="Đà Nẵng v1" />
+
+                <TextView
+                    android:id="@+id/packPath"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    android:maxLines="2"
+                    android:ellipsize="middle"
+                    tools:text="/sdcard/ts8/map-pack/danang" />
+
+                <TextView
+                    android:id="@+id/packAttribution"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_micro"
+                    tools:text="© OpenStreetMap contributors" />
+            </LinearLayout>
+
+            <!-- §6: the second required entry point into map pack management.
+                 The rescan below only re-walks the known folders; importing a
+                 new pack, choosing between two installed ones and removing the
+                 active one all need a screen, and this is where a driver looks
+                 for it. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnManagePack"
+                    style="@style/Button.Ghost"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/map_management" />
+
+                <Button
+                    android:id="@+id/btnRescanPack"
+                    style="@style/Button.Ghost"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/gap_small"
+                    android:text="@string/settings_rescan_pack" />
+            </LinearLayout>
+
+            <!-- ===== voice (§4 of the voice pilot) ===== -->
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/settings_section_voice" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card">
+
+                <!-- The state the store actually returned, never an inferred
+                     one: NOT_INSTALLED / VALIDATING / READY / INCOMPATIBLE /
+                     CORRUPT / FAILED. A unit with no model is the shipped
+                     state, and it says so instead of failing to draw. -->
+                <TextView
+                    android:id="@+id/voiceModelState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_body"
+                    tools:text="Mô hình: sẵn sàng" />
+
+                <TextView
+                    android:id="@+id/voiceModelDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Phiên bản: vosk-model-small-vn-0.4 · 51.3 MB · ABI armeabi-v7a" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    android:text="@string/voice_model_hint" />
+
+                <!-- The recogniser policy, as chips. Same reasoning as the
+                     online and parking rows: the platform Switch on this ROM
+                     is invisible against the card. -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_body"
+                    android:text="@string/settings_voice_policy" />
+
+                <LinearLayout
+                    android:id="@+id/voicePolicyRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:orientation="horizontal" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    android:text="@string/settings_voice_policy_hint" />
+            </LinearLayout>
+
+            <!-- §4's CTA when nothing valid is installed. It stays visible in
+                 every non-READY state precisely because those are the states a
+                 driver can fix by installing a pack. -->
+            <Button
+                android:id="@+id/btnVoiceModelManage"
+                style="@style/Button.Ghost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:text="@string/settings_voice_model_cta" />
+
+            <!-- ===== voice feedback (beep + TTS prompts) ===== -->
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/settings_section_voice_feedback" />
+
+            <LinearLayout
+                android:id="@+id/voiceFeedbackCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card">
+
+                <!-- Beep toggle -->
+                <LinearLayout
+                    android:id="@+id/voiceBeepRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    android:text="@string/settings_voice_beep_hint" />
+
+                <!-- Listening prompt toggle -->
+                <LinearLayout
+                    android:id="@+id/voicePromptRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    android:text="@string/settings_voice_prompt_listen_hint" />
+
+                <!-- Auto-execute toggle -->
+                <LinearLayout
+                    android:id="@+id/voiceAutoExecRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    android:text="@string/settings_voice_auto_exec_hint" />
+            </LinearLayout>
+
+            <!-- ===== driving alerts (inspired by reference APK) ===== -->
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/settings_section_driving_alerts" />
+
+            <LinearLayout
+                android:id="@+id/drivingAlertsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card">
+
+                <!-- Master alert toggle -->
+                <LinearLayout
+                    android:id="@+id/alertMasterRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    android:text="@string/settings_alerts_master_hint" />
+
+                <!-- Speed alert toggle -->
+                <LinearLayout
+                    android:id="@+id/alertSpeedRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+
+                <!-- Camera alert toggle -->
+                <LinearLayout
+                    android:id="@+id/alertCameraRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+
+                <!-- Navigation alert toggle -->
+                <LinearLayout
+                    android:id="@+id/alertNavRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+            </LinearLayout>
+
+            <!-- ===== permissions ===== -->
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/settings_section_permissions" />
+
+            <LinearLayout
+                android:id="@+id/permissionList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card" />
+
+            <!-- ===== parking (§9) ===== -->
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/parking_title" />
+
+            <LinearLayout
+                android:id="@+id/parkingAutoRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card">
+
+                <!-- The setting, as two chips rather than a `Switch`: the same
+                     reason the online row uses chips, and the same reason the
+                     map settings panel does — on this ROM the platform switch
+                     draws in the theme's disabled colour and disappears against
+                     this card.
+
+                     This row used to be a static "Chưa khả dụng" label, on the
+                     argument that the unit has no verified vehicle signal. That
+                     argument still holds for the *vehicle* signals, and it is
+                     why auto-entry never fires on a gear reading here. It never
+                     prevented the GPS heuristic from running: the resolver
+                     already refuses a stop under twenty seconds, requires the
+                     location engine's own stability verdict, restarts the dwell
+                     when the fix drops out, and blocks entry during a call, the
+                     reverse camera or an active route. What was missing was not
+                     evidence — it was the switch the resolver was already
+                     reading. -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_body"
+                    android:text="@string/parking_auto" />
+
+                <TextView
+                    android:id="@+id/parkingAutoOff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/gap"
+                    android:paddingEnd="@dimen/gap"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:background="@drawable/bg_chip"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption"
+                    android:text="@string/qs_off" />
+
+                <TextView
+                    android:id="@+id/parkingAutoOn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/gap_small"
+                    android:paddingStart="@dimen/gap"
+                    android:paddingEnd="@dimen/gap"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:background="@drawable/bg_chip"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption"
+                    android:text="@string/qs_on" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingEnd="@dimen/gap_small"
+                android:paddingTop="4dp"
+                android:paddingBottom="@dimen/gap"
+                android:textColor="@color/text_tertiary"
+                android:textSize="@dimen/text_micro"
+                android:text="@string/parking_auto_hint" />
+
+            <!-- ===== online music (§12–13) ===== -->
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/settings_section_online" />
+
+            <LinearLayout
+                android:id="@+id/onlineCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card">
+
+                <!-- Bật/tắt drawn as two chips rather than a `Switch`: the same
+                     reason the map settings panel does it. The platform switch
+                     on this ROM renders in the theme's disabled colour, which is
+                     invisible against this card. -->
+                <LinearLayout
+                    android:id="@+id/onlineToggleRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical" />
+
+                <!-- The three providers are configured separately because they
+                     are unrelated endpoints: a podcast feed URL and a Subsonic
+                     server URL entered into one field would make saving one
+                     silently break the other. A provider with a blank endpoint
+                     reports BLOCKED_EXTERNAL_CONFIG on the music screen, which
+                     is the truthful state, not an error to hide. -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    android:text="@string/settings_online_hint" />
+
+                <EditText
+                    android:id="@+id/onlineFeed"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="@string/settings_online_feed_hint"
+                    android:textColorHint="@color/text_tertiary"
+                    android:paddingStart="@dimen/gap_small"
+                    android:paddingEnd="@dimen/gap_small"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_body"
+                    android:singleLine="true"
+                    android:inputType="textUri"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor" />
+
+                <EditText
+                    android:id="@+id/onlineServer"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="@string/music_online_server_url"
+                    android:textColorHint="@color/text_tertiary"
+                    android:paddingStart="@dimen/gap_small"
+                    android:paddingEnd="@dimen/gap_small"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_body"
+                    android:singleLine="true"
+                    android:inputType="textUri"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor" />
+
+                <EditText
+                    android:id="@+id/onlineUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="@string/music_online_server_user"
+                    android:textColorHint="@color/text_tertiary"
+                    android:paddingStart="@dimen/gap_small"
+                    android:paddingEnd="@dimen/gap_small"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_body"
+                    android:singleLine="true"
+                    android:inputType="text"
+                    android:imeOptions="actionNext"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor" />
+
+                <!-- The password field is never pre-filled. An empty field
+                     means "keep what is stored"; the line under it says whether
+                     something is stored, so the driver can tell a saved
+                     credential from a blank one without the screen echoing the
+                     secret back. -->
+                <EditText
+                    android:id="@+id/onlinePass"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="@string/music_online_server_pass"
+                    android:textColorHint="@color/text_tertiary"
+                    android:paddingStart="@dimen/gap_small"
+                    android:paddingEnd="@dimen/gap_small"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_body"
+                    android:singleLine="true"
+                    android:inputType="textPassword"
+                    android:imeOptions="actionDone"
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor" />
+
+                <TextView
+                    android:id="@+id/onlinePassState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    tools:text="Đã lưu mật khẩu — để trống nếu giữ nguyên" />
+
+                <!-- Which Subsonic family the URL points at. Chips, filled in
+                     by the Activity, because both entries come from one enum. -->
+                <LinearLayout
+                    android:id="@+id/onlineKindRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:orientation="horizontal" />
+
+                <TextView
+                    android:id="@+id/onlineStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="BLOCKED_EXTERNAL_CONFIG — chưa cấu hình endpoint/credential cho nguồn này" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSaveOnline"
+                style="@style/Button.Ghost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:text="@string/music_online_save" />
+
+            <!-- ===== system / device info ===== -->
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/settings_section_system" />
+
+            <LinearLayout
+                android:id="@+id/systemInfoCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card">
+
+                <TextView
+                    android:id="@+id/deviceModelText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_body"
+                    tools:text="Model: TS8-SP9832A" />
+
+                <TextView
+                    android:id="@+id/deviceBoardText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    tools:text="Mainboard: sp9832a_6h10_v1" />
+
+                <TextView
+                    android:id="@+id/deviceScreenText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    tools:text="Màn hình: 1024x600" />
+
+                <TextView
+                    android:id="@+id/memoryText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    tools:text="RAM: 1.0 GB" />
+
+                <TextView
+                    android:id="@+id/storageText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_micro"
+                    tools:text="Bộ nhớ: 8.0 GB" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnMapDiag"
+                style="@style/Button.Ghost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:text="@string/settings_map_diag" />
+
+            <!-- ===== about ===== -->
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/settings_section_about" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card">
+
+                <TextView
+                    android:id="@+id/versionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_body"
+                    tools:text="TS8 Launcher 1.0.0 (1)" />
+
+                <TextView
+                    android:id="@+id/platformText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_caption"
+                    tools:text="Android 6.0 (API 23)" />
+            </LinearLayout>
+
+            <!-- §10 last resort: the driver cross-references state against
+                 what the launcher believes, reads the build hash out loud, and
+                 exports a file rather than photographing the screen. -->
+            <Button
+                android:id="@+id/btnDiagnostics"
+                style="@style/Button.Ghost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:layout_marginBottom="@dimen/gap"
+                android:text="@string/diagnostics_open" />
+        </LinearLayout>
+    </ScrollView>
+
+    <com.ts8.launcher.ui.BottomNavView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

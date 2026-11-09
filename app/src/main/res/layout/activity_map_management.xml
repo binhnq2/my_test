@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Map Management & settings — the screen §8 of the repair brief requires.
+
+  It is not one of the design's seven states: it is the place a driver goes when
+  the map is missing, and the place where the two settings groups the brief
+  names (`Hiển thị`, `Tốc độ & cảnh báo`) actually live. Reached from the map
+  placeholder's "Cài bản đồ", from Settings and from Quick Settings.
+
+  Layout reasoning for 1024x600:
+  * Everything scrolls in one column. A two-column layout would fit the settings
+    but not the pack cards, and a mixed layout reflows badly on 600 dp height.
+  * Rows are 44 dp minimum: below that a thumb misses while the car is moving.
+  * Each setting is a label plus a row of chips (segmented control) built in
+    code from `OptionRow`, so a new value is one string and one enum constant,
+    not a new layout.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <!-- §4: no launcher status row on Map Management. -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="@dimen/gap_small"
+        android:layout_marginTop="@dimen/vendor_bar_inset"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_chevron_left"
+        app:tint="@color/text_secondary"
+        android:contentDescription="@string/generic_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/screenTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/gap_small"
+        android:layout_marginEnd="@dimen/screen_pad"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_title"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/map_mgmt_title"
+        app:layout_constraintTop_toTopOf="@id/btnBack"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ScrollView
+        android:id="@+id/contentScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/gap_small"
+        android:layout_marginBottom="@dimen/gap_small"
+        android:paddingStart="@dimen/screen_pad"
+        android:paddingEnd="@dimen/screen_pad"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/map_section_packs" />
+
+            <LinearLayout
+                android:id="@+id/packList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/packEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_body"
+                android:text="@string/map_pack_none"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnImport"
+                    style="@style/Button.Primary"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/map_action_import" />
+
+                <Button
+                    android:id="@+id/btnRescan"
+                    style="@style/Button.Ghost"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/gap_small"
+                    android:layout_weight="1"
+                    android:text="@string/map_action_validate" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/importStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingEnd="@dimen/gap_small"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_caption"
+                android:visibility="gone"
+                tools:text="Đang nhập map pack…"
+                tools:visibility="visible" />
+
+            <!-- Download section -->
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/map_section_download" />
+
+            <LinearLayout
+                android:id="@+id/downloadGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <EditText
+                        android:id="@+id/serverUrlInput"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/map_download_server_hint"
+                        android:inputType="textUri"
+                        android:textSize="@dimen/text_body"
+                        android:background="@android:color/transparent"
+                        android:singleLine="true"
+                        android:importantForAutofill="no" />
+                    <Button
+                        android:id="@+id/btnSaveServer"
+                        style="@style/Button.Ghost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="0dp"
+                        android:layout_marginStart="@dimen/gap_small"
+                        android:text="@string/map_download_server_save" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnFetchCatalog"
+                    style="@style/Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:text="@string/map_download_fetch" />
+
+                <LinearLayout
+                    android:id="@+id/catalogList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/gap_small" />
+
+                <TextView
+                    android:id="@+id/downloadStatus"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_caption"
+                    android:visibility="gone"
+                    tools:text="Đang tải: Đà Nẵng (45%)"
+                    tools:visibility="visible" />
+
+                <ProgressBar
+                    android:id="@+id/downloadProgress"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:visibility="gone"
+                    android:max="100"
+                    tools:progress="45"
+                    tools:visibility="visible" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp"
+                    android:gravity="end">
+                    <Button
+                        android:id="@+id/btnDownloadCancel"
+                        style="@style/Button.Ghost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:minWidth="0dp"
+                        android:text="@string/map_download_cancel"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/map_section_storage" />
+
+            <TextView
+                android:id="@+id/storageText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_caption"
+                android:lineSpacingExtra="2dp"
+                tools:text="Vị trí lưu: /data/user/0/…/map-pack" />
+
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/map_section_display" />
+
+            <LinearLayout
+                android:id="@+id/displayGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card" />
+
+            <Button
+                android:id="@+id/btnRestoreDisplay"
+                style="@style/Button.Ghost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:text="@string/disp_restore_defaults" />
+
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/map_section_speed" />
+
+            <LinearLayout
+                android:id="@+id/speedGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card" />
+
+            <TextView
+                style="@style/Text.Caption"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingBottom="4dp"
+                android:text="@string/map_section_diagnostics" />
+
+            <TextView
+                android:id="@+id/diagText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card"
+                android:fontFamily="monospace"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_micro"
+                android:lineSpacingExtra="2dp"
+                android:text="@string/map_diag_empty"
+                android:textIsSelectable="true" />
+
+            <Button
+                android:id="@+id/btnCopyDiag"
+                style="@style/Button.Ghost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:text="@string/map_diag_copy" />
+
+            <Button
+                android:id="@+id/btnViewLog"
+                style="@style/Button.Ghost"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:text="@string/map_diag_view_log" />
+
+            <TextView
+                android:id="@+id/logText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card"
+                android:fontFamily="monospace"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_micro"
+                android:lineSpacingExtra="2dp"
+                android:visibility="gone"
+                android:textIsSelectable="true" />
+        </LinearLayout>
+    </ScrollView>
+
+    <com.ts8.launcher.ui.BottomNavView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

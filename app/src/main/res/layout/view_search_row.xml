@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One row in the search result list.
+
+  Two lines of text and a trailing distance. The distance is a separate view
+  rather than part of the subtitle because it is right-aligned: a place name and
+  its distance read as two columns, and joining them into one string makes the
+  numbers ragged down the list.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:minHeight="56dp"
+    android:paddingStart="@dimen/gap"
+    android:paddingEnd="@dimen/gap"
+    android:paddingTop="6dp"
+    android:paddingBottom="6dp"
+    android:background="@drawable/bg_list_item">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/resultName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_body"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Cầu Rồng" />
+
+        <TextView
+            android:id="@+id/resultAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_caption"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="Đ. Nguyễn Văn Linh, Đà Nẵng" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/resultDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/gap"
+        android:textColor="@color/text_tertiary"
+        android:textSize="@dimen/text_caption"
+        android:maxLines="1"
+        tools:text="6,2 km" />
+</LinearLayout>

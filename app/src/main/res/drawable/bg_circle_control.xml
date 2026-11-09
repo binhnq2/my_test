@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Round transport / map control button.
+
+  A circle rather than a rounded rect because the design's play button is a
+  circle and a 44 dp round target is what a thumb actually hits on a car
+  screen while the car is moving.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="oval">
+            <solid android:color="@color/surface_chip" />
+            <stroke android:width="1dp" android:color="@color/accent" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/surface_card_raised" />
+            <stroke android:width="1dp" android:color="@color/divider_strong" />
+        </shape>
+    </item>
+</selector>

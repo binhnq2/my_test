@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Play/pause button surface: a hollow ring, not a filled disc.
+
+  Measured on two independent panels of docs/UI_design.png:
+
+    Home card      ring 45 px across, centred at x~656 on the music card
+    Music screen   ring 54 px across, bbox (234,669)-(287,722)
+
+  In both, a horizontal scan through the vertical centre finds the row as
+  background / thin bright edge / background / white glyph bars / background /
+  thin bright edge / background — i.e. the interior is the same navy as the
+  panel, and only a hairline circle is drawn. The glyph inside is pure white
+  rgb(252,253,251).
+
+  This project previously used @drawable/bg_circle_accent here: a solid
+  @color/accent disc. That reads as "the app's action button", which is not
+  what the sheet draws on either screen — the design keeps the transport
+  controls quiet and lets the album art carry the colour.
+
+  The stroke is 2dp. In the sheet the ring is ~1 px at a panel scale of about
+  1.38 (1024 / 742), so 1.4dp of true width; 2dp is the nearest whole value and
+  the difference is under one pixel at the target density. The ring colour is
+  @color/text_primary because the sampled edge pixels are a light near-white
+  over the dark navy — a saturated accent would have shown as a blue-dominant
+  edge, and it does not.
+
+  Deliberately NOT reused by the 6dp "now playing" dot on a list row
+  (view_music_row.xml), which stays a filled @drawable/bg_circle_accent: a
+  hollow 6dp ring would be invisible.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="oval">
+            <solid android:color="@android:color/transparent" />
+            <stroke
+                android:width="2dp"
+                android:color="@color/text_secondary" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@android:color/transparent" />
+            <stroke
+                android:width="2dp"
+                android:color="@color/text_primary" />
+        </shape>
+    </item>
+</selector>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Apps — design state 5, the app drawer.
+
+  A grid of the apps actually installed on the unit, each launched with its own
+  launch intent. Nothing here is a hard-coded tile: the design shows Maps,
+  Music, Phone, Radio, Camera, Settings, Bluetooth, Chrome, YouTube, Files, EQ
+  and Car Info, and what appears depends entirely on what the firmware ships.
+  When an app is missing the tile is simply absent — the alternative, a tile
+  that opens nothing, is the failure mode the spec calls out.
+
+  The search field exists because a launchable list on this unit can run to
+  several screens and scrolling while driving is worse than typing.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <!-- §4: no launcher status row on the app drawer. -->
+
+    <!-- Title and filter, on one row so the grid gets the rest of the height. -->
+    <LinearLayout
+        android:id="@+id/appsHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/screen_pad"
+        android:paddingEnd="@dimen/screen_pad"
+        android:paddingTop="@dimen/vendor_bar_inset"
+        android:paddingBottom="@dimen/gap_small"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            style="@style/Text.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/apps_title" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/gap"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/gap"
+            android:paddingEnd="@dimen/gap"
+            android:background="@drawable/bg_search_field">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_search"
+                app:tint="@color/text_tertiary"
+                android:contentDescription="@null" />
+
+            <EditText
+                android:id="@+id/appsSearch"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/gap_small"
+                android:background="@null"
+                android:hint="@string/apps_search_hint"
+                android:textColorHint="@color/text_tertiary"
+                android:textColor="@color/text_primary"
+                android:textSize="@dimen/text_body"
+                android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:importantForAutofill="no" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/appsGrid"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingStart="@dimen/screen_pad"
+        android:paddingEnd="@dimen/screen_pad"
+        android:paddingBottom="@dimen/screen_pad"
+        android:clipToPadding="false"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/appsHeader"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/appsEmpty"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/appsHeader"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_nav_apps"
+            app:tint="@color/text_tertiary"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/appsEmptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_small"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_body"
+            android:text="@string/apps_empty" />
+    </LinearLayout>
+
+    <com.ts8.launcher.ui.BottomNavView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

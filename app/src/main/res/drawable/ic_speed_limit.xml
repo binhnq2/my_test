@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Speed-limit sign icon for the traffic alert card.
+  A red ring with "60" in the centre — the universal maximum-speed symbol.
+  Vector drawable so it scales cleanly at any density.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp"
+    android:height="28dp"
+    android:viewportWidth="28"
+    android:viewportHeight="28">
+
+    <!-- White background disc -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M14,14m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0" />
+
+    <!-- Red ring -->
+    <path
+        android:fillColor="#d32f2f"
+        android:strokeWidth="0"
+        android:pathData="M14,2a12,12 0,1 0,0 24a12,12 0,1 0,0 -24zM14,5a9,9 0,1 1,0 18a9,9 0,1 1,0 -18z" />
+
+    <!-- "60" text placeholder — the actual number is drawn by the bitmap
+         generator at runtime. This vector is the static fallback for the
+         tools: preview and the alert card's ImageView before the first
+         traffic sign is loaded. -->
+    <path
+        android:fillColor="#1a1a1a"
+        android:pathData="M10,10h2v3h-2zM16,10h2v3h-2z" />
+</vector>

@@ -1,0 +1,1 @@
+set "JAVA_HOME=D:\_ts8_toolchain\jdk-17.0.20.1+1" && set "ANDROID_PREFS_ROOT=" && gradlew.bat :app:assembleDebug

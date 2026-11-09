@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Launcher / home app -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+
+    <!-- Location -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
+    <!-- Voice Instant (§10). Requested at the moment the driver first taps the
+         mic, never at boot: a launcher that asks for the microphone on first
+         start teaches the driver to deny it. If it is denied the overlay says
+         so and points at Settings — it never retries silently. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <!-- Online music (§12–13). Without INTERNET every provider fails with a
+         transport error and the driver is told the station is unavailable when
+         the real fault is the manifest. ACCESS_NETWORK_STATE is what lets the
+         gateway tell "offline" apart from "the provider is down" before it
+         spends a request on a dead modem. Both are install-time permissions on
+         API 23, so neither needs a runtime request. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Music / media -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission
+        android:name="android.permission.MEDIA_CONTENT_CONTROL"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- System state for quick settings -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <!-- Hardware that must not block installation on the head unit -->
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+    <uses-feature android:name="android.hardware.wifi" android:required="false" />
+    <uses-feature android:name="android.hardware.bluetooth" android:required="false" />
+    <uses-feature android:name="android.hardware.usb.host" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature android:name="android.hardware.screen.landscape" android:required="false" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <!-- Modern OpenGLES 3.0 is what MapLibre needs; declare it optional so a
+         device without ES3 still installs and the map engine reports it. -->
+    <uses-feature android:glEsVersion="0x00030000" android:required="false" />
+
+    <!-- Android 11+ package visibility: launcher must see launchable apps -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+        </intent>
+        <!-- Voice Instant needs to see the recogniser service. Harmless on
+             API 23 (package visibility arrived in API 30) and required on a
+             newer host build. -->
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+    </queries>
+
+    <application
+        android:name=".Ts8LauncherApp"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Ts8Launcher"
+        android:hardwareAccelerated="true"
+        tools:targetApi="34">
+
+        <!-- Home activity. Not the default launcher by default: the user opts
+             in via Settings, so the stock launcher is never removed.
+
+             `CATEGORY_HOME` + `CATEGORY_DEFAULT` are what make this app a
+             *candidate* in Android's own "choose Home" dialog. They do not make
+             it the Home app — that requires the driver to pick it, and the
+             stock launcher stays installed and selectable either way. Without
+             these two lines the app is only a normal launchable app and cannot
+             be assigned the Home role at all, which would silently make the
+             manual opt-in in the spec impossible. -->
+        <activity
+            android:name=".ui.HomeActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout|uiMode|density"
+            android:resizeableActivity="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- §7: the keyboard must be hidden when this screen opens. The search
+             field is the only focusableInTouchMode view in the layout, so the
+             platform's initial-focus rule would otherwise land on it and raise
+             the IME over the library the moment the driver taps "Nhạc".
+             `stateAlwaysHidden` inhibits the IME for the activity; `adjustPan`
+             means that when the driver *does* tap Search, the panel is not
+             resized under the map — the field pans into view instead.
+             The layout root also takes focus explicitly (see
+             MusicFullscreenActivity.onCreate), because windowSoftInputMode
+             alone does not stop the field from holding focus and showing a
+             blinking caret. -->
+        <activity
+            android:name=".ui.MusicFullscreenActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize|uiMode"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".ui.MapActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout|uiMode|density"
+            android:launchMode="singleTop" />
+
+        <!-- Opened over Home or over the map, so not singleTask: finishing it
+             must return to whichever screen launched it. -->
+        <activity
+            android:name=".ui.SearchActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="stateAlwaysVisible"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".ui.AppDrawerActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".ui.QuickSettingsActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop" />
+
+        <!-- §11's diagnostics screen. Declared for the same reason Map
+             Management is: an undeclared Activity cannot be started, and the
+             Settings row that opens it would throw ActivityNotFoundException
+             and take Settings down with it. -->
+        <activity
+            android:name=".ui.DiagnosticsActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop" />
+
+        <!-- Map pack management: import, validate, activate, remove.
+             Declared here because it is an Activity with its own layout, not a
+             dialog, and because an undeclared Activity cannot be started at
+             all — `startActivity` throws ActivityNotFoundException and takes the
+             caller down with it. It is reached from the map error surface, from
+             Settings > Bản đồ and from the app drawer, so every one of those
+             entry points was dead before this line existed. -->
+        <activity
+            android:name=".ui.MapManagementActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop" />
+
+        <activity
+            android:name=".ui.ParkingModeActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop" />
+
+        <!-- §4 of the voice pilot: Voice Model Management. A maintenance
+             screen opened from Settings; not exported, no result contract. -->
+        <activity
+            android:name=".ui.VoiceModelActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTop" />
+
+        <!-- A black window standing in for the panel being off. Its own task
+             is not wanted: it is dismissed by a tap and must leave the map and
+             the music exactly as they were. -->
+        <activity
+            android:name=".ui.ScreenOffActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.Ts8Launcher.Fullscreen"
+            android:launchMode="singleTop" />
+
+        <!-- Music playback lives in a service so it survives activity changes -->
+        <service
+            android:name=".service.MusicPlaybackService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+
+        <receiver
+            android:name=".service.MediaButtonReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".service.UsbMediaReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
+                <action android:name="android.hardware.usb.action.USB_DEVICE_DETACHED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_MOUNTED" />
+                <action android:name="android.intent.action.MEDIA_UNMOUNTED" />
+                <action android:name="android.intent.action.MEDIA_EJECT" />
+                <action android:name="android.intent.action.MEDIA_REMOVED" />
+                <data android:scheme="file" />
+            </intent-filter>
+            <meta-data
+                android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED"
+                android:resource="@xml/usb_device_filter" />
+        </receiver>
+    </application>
+</manifest>

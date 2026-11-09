@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Scale-safe dimensions. The acceptance gate requires the layout to work
+         at 1024x600; these values are used with sw600dp qualifiers where a
+         larger screen would otherwise leave dead space. -->
+    <dimen name="screen_pad">16dp</dimen>
+    <dimen name="card_radius">20dp</dimen>
+    <dimen name="card_radius_small">14dp</dimen>
+    <dimen name="card_pad">16dp</dimen>
+    <dimen name="gap">12dp</dimen>
+    <dimen name="gap_small">8dp</dimen>
+
+    <!-- The hairline every layered surface is drawn with. Tokenised because
+         eight drawables use the same value and a 2dp change would otherwise
+         mean eight edits that can each be missed. -->
+    <dimen name="card_border">1dp</dimen>
+
+    <dimen name="bottom_nav_height">72dp</dimen>
+    <dimen name="bottom_nav_icon">26dp</dimen>
+    <dimen name="bottom_nav_label">12sp</dimen>
+    <dimen name="scorebar_height">44dp</dimen>
+
+    <!-- ==================================================================
+         The TS8 vendor status bar inset (§4).
+
+         The head unit draws its own status bar above whatever the launcher
+         draws, and its height is a property of the firmware, not of this app.
+         The launcher can read it at runtime through the window insets APIs,
+         except that on API 23 the only reliable source is the display's
+         `getRealSize` versus `getSize`, which this launcher does not have
+         permission-free access to in a form that survives a rotation.
+
+         So the screens that deliberately draw no launcher status row are inset
+         by this token instead. 32dp is the Android 6 phone status bar height and
+         is the right starting point for a vendor bar of the same era; if the
+         TS8's bar is a different height the device checklist step "no content
+         is hidden under the vendor bar" is what catches it, and this one value
+         is what gets changed.
+         ================================================================== -->
+    <dimen name="vendor_bar_inset">32dp</dimen>
+
+    <!-- Height of the compact top overlay on Home and the map (§4). Shorter
+         than the old 44dp status row because it carries three controls and no
+         text baseline, which is what lets it sit over a map without a band. -->
+    <dimen name="top_overlay_height">54dp</dimen>
+
+    <!-- The status row. Sized for a 24 sp clock plus the 18 dp radio icons
+         and 6 dp vertical padding; a taller row would push the map down on a
+         600 dp-tall panel, which is exactly the screen this must fit. -->
+    <dimen name="status_height">44dp</dimen>
+
+    <dimen name="music_card_width">300dp</dimen>
+    <dimen name="music_card_width_compact">236dp</dimen>
+
+    <!-- §5's non-overlap guarantee on the map, as one number.
+
+         It is `music_card_width_compact` plus the card's own end margin, so
+         `guidanceControls` — the mute / overview / end column, which must stay
+         visible and tappable in every guidance state — ends exactly where the
+         compact card begins. `MapCompositionTest` recomputes this sum from the
+         layout XML, so the two cannot drift apart silently. -->
+    <dimen name="map_controls_reserve">248dp</dimen>
+    <dimen name="music_artwork_size">84dp</dimen>
+    <dimen name="music_artwork_size_compact">56dp</dimen>
+    <dimen name="music_artwork_large">248dp</dimen>
+    <dimen name="music_control_size">44dp</dimen>
+    <dimen name="music_control_size_large">64dp</dimen>
+
+    <!-- Map screen chrome. Every round control is 44 dp: below that a thumb
+         misses while the car is moving, which is the only ergonomics that
+         matters on this panel. -->
+    <dimen name="map_control_size">44dp</dimen>
+    <dimen name="maneuver_card_width">320dp</dimen>
+    <dimen name="eta_strip_height">48dp</dimen>
+
+    <!-- The idle search field on the map: the field is 48 dp tall with a 12 dp
+         bottom margin, and anything pinned to the bottom of `mapHost` has to
+         end 12 dp above its top edge. 12 + 48 + 12 = 72. Both the speed pair
+         and the browse control column use this, so they cannot drift apart. -->
+    <dimen name="map_search_field_height">48dp</dimen>
+    <dimen name="map_search_field_clearance">72dp</dimen>
+
+    <!-- App drawer: six columns as the design draws them. -->
+    <dimen name="app_icon_size">64dp</dimen>
+    <dimen name="app_grid_spacing">12dp</dimen>
+
+    <!-- Quick settings -->
+    <dimen name="qs_tile_height">92dp</dimen>
+    <dimen name="qs_slider_height">48dp</dimen>
+
+    <!-- Parking mode clock -->
+    <dimen name="parking_clock">96sp</dimen>
+
+    <dimen name="text_micro">10sp</dimen>
+    <dimen name="text_caption">12sp</dimen>
+    <dimen name="text_body">14sp</dimen>
+    <dimen name="text_title">18sp</dimen>
+    <dimen name="text_headline">24sp</dimen>
+    <dimen name="text_display">36sp</dimen>
+    <dimen name="text_huge">64sp</dimen>
+</resources>

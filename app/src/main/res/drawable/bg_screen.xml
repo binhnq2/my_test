@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The screen background every activity's root already uses (@color/bg_root).
+
+  Replaced with a two-stop gradient whose ends are both within a few values of
+  bg_root. The point is not colour: it is that a large flat field at 1024x600
+  shows banding on a cheap panel, and more importantly it gives the cards
+  something to sit *on*. Against a single flat value the card gradient's
+  bottom end met a background of nearly the same luminance and the card's
+  lower edge dissolved.
+
+  Deliberately almost invisible. A wash strong enough to notice would read as
+  a coloured panel, which is not what the design draws; this is the faintest
+  direction the eye can resolve.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="@color/bg_wash_top"
+        android:endColor="@color/bg_root"
+        android:type="linear" />
+</shape>

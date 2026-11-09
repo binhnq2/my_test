@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Legibility wash for Parking Mode.
+
+  The clock, the date and the weather chip all sit on the left of the screen,
+  over a photograph the driver chose. A light-grey date over a bright sky or a
+  silver car is unreadable at arm's length, and the default `bg_car` is itself
+  a photograph, so this cannot be a wash that only appears for a picked image.
+
+  **A gradient rather than a flat tint.** A flat 20 % black over the whole panel
+  dims the photograph the driver deliberately set — the reason they set it was
+  to look at it. This fades from 55 % black at the left edge, where the type is,
+  to fully transparent before the middle, so the type has a dark bed and the
+  picture keeps its own contrast on the right.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="0"
+        android:centerColor="#30000000"
+        android:endColor="#00000000"
+        android:startColor="#8C000000"
+        android:type="linear" />
+</shape>

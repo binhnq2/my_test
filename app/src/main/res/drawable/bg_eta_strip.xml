@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The eta strip under the maneuver card.
+
+  Surface is the panel's own raised navy, NOT a green fill. The design sheet
+  draws this band as rgb(1,22,36) — the same near-black navy as the cards above
+  it — with only the duration "12 phút" in green rgb(2,235,110). Measured on the
+  Navigation panel: the band's dominant colour is rgb(1,22,36) across every
+  scanned row (y 320–356), and the only saturated pixels in the whole band are
+  318 green ones inside the duration text, bbox x814–1136.
+
+  An earlier version filled the entire strip with @color/success and set the
+  text white, which read as a solid green bar under a dark card. That inverted
+  the design: the colour belongs on the number being read at a glance, not on
+  the surface behind it.
+
+  Corners: square on the left, rounded on the right, so the strip continues the
+  card above it.
+
+  Batch 1 moved this from a flat fill to the same gradient the card above it
+  uses. It is drawn to continue that card, and a flat strip under a gradient
+  one made the seam between them visible as a step.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="@color/surface_raised_top"
+        android:endColor="@color/surface_raised_bottom"
+        android:type="linear" />
+    <corners
+        android:topLeftRadius="0dp"
+        android:topRightRadius="@dimen/card_radius_small"
+        android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="@dimen/card_radius_small" />
+</shape>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One tile in the app grid: icon over label, the way the design draws them.
+
+  The tile is a vertical LinearLayout with a 64 dp icon and a two-line label;
+  the label is capped at two lines and ellipsised because a head-unit app list
+  routinely contains names like "Car Info" and "File Explorer" on one screen,
+  and wrapping to three lines makes the grid rows unequal.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="@dimen/gap_small"
+    android:minHeight="112dp"
+    android:background="@drawable/bg_list_item">
+
+    <ImageView
+        android:id="@+id/appIcon"
+        android:layout_width="@dimen/app_icon_size"
+        android:layout_height="@dimen/app_icon_size"
+        android:contentDescription="@string/cd_app_icon"
+        tools:src="@drawable/ic_nav_apps" />
+
+    <TextView
+        android:id="@+id/appLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/gap_small"
+        android:gravity="center"
+        android:textColor="@color/text_secondary"
+        android:textSize="@dimen/text_caption"
+        android:maxLines="2"
+        android:ellipsize="end"
+        tools:text="Camera" />
+</LinearLayout>

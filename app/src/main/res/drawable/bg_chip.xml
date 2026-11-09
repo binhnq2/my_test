@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  A chip: the state banner on the map, the pack-status pill, a filter tag.
+
+  Was a flat `@color/surface_chip` fill. Chip sits on top of a card rather than
+  on the root, so it needs more separation than the card itself, not less —
+  without it the chip disappeared into whatever raised surface it was drawn on.
+  A gradient and a hairline give it that without changing the colour family.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:angle="270"
+        android:startColor="@color/surface_raised_top"
+        android:endColor="@color/surface_chip"
+        android:type="linear" />
+    <stroke
+        android:width="@dimen/card_border"
+        android:color="@color/surface_card_border" />
+    <corners android:radius="@dimen/card_radius_small" />
+</shape>

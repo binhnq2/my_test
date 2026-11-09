@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The primary action button.
+
+  Was a flat accent fill, which on a screen whose every card is now a gradient
+  read as a sticker pasted over the design rather than part of it. A vertical
+  gradient between two accent values keeps the colour identity — it is still
+  unmistakably the app's action blue — while matching the lighting direction of
+  every surface around it.
+
+  No border here: a border on a saturated fill muddies the edge. The contrast
+  against the navy behind it is already the separation.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/accent_pressed" />
+            <corners android:radius="@dimen/card_radius_small" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="@color/accent"
+                android:endColor="@color/accent_pressed"
+                android:type="linear" />
+            <corners android:radius="@dimen/card_radius_small" />
+        </shape>
+    </item>
+</selector>

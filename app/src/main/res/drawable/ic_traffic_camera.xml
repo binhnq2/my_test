@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Camera enforcement icon for the traffic alert card.
+  A camera body with a red lens — used for speed and red-light cameras.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="28dp"
+    android:height="28dp"
+    android:viewportWidth="28"
+    android:viewportHeight="28">
+
+    <!-- Camera body -->
+    <path
+        android:fillColor="#37474f"
+        android:pathData="M6,9h16v10h-16z" />
+
+    <!-- Top mount -->
+    <path
+        android:fillColor="#263238"
+        android:pathData="M13,6h2v3h-2z" />
+
+    <!-- Lens outer (red) -->
+    <path
+        android:fillColor="#d32f2f"
+        android:pathData="M14,14m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0" />
+
+    <!-- Lens inner -->
+    <path
+        android:fillColor="#b71c1c"
+        android:pathData="M14,14m-2.5,0a2.5,2.5 0,1 1,5 0a2.5,2.5 0,1 1,-5 0" />
+</vector>

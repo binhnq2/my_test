@@ -1,0 +1,10 @@
+.work
+.gradle
+.idea
+.vscode
+.workbuddy-ai
+.zwork
+/app/build
+*/*/build
+buildSrc
+

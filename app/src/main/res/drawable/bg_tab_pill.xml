@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Background for a library tab: an outlined pill when selected, nothing when
+  not.
+
+  The design sheet draws the selected tab as a rounded rectangle with a 1 px
+  accent hairline and a brighter underscore inside it, and leaves the other
+  three as bare labels. This project had no background at all — selection only
+  swapped the label colour — so the row read as four equal words with one
+  slightly bluer.
+
+  Why a selector and not a TabLayout: the comment in @color/music_tab_tint used
+  to argue a TabLayout was wrong because "the design has no indicator bar". The
+  design does have one — the underscore is visible in the sheet at 5x. What the
+  design does not have is TabLayout's ripple and its sliding indicator, so the
+  outline and underscore are drawn here as a static shape instead.
+
+  The pill's corner radius matches card_radius_small so the tab reads as the
+  same family as the row highlight beneath it.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/accent_soft" />
+            <stroke
+                android:width="1dp"
+                android:color="@color/icon_active" />
+            <corners android:radius="@dimen/card_radius_small" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+</selector>

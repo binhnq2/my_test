@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Music — design state 3, fullscreen.
+
+  Two columns, as the design has them: what is playing on the left, how to
+  choose something else on the right. The split is a horizontal `LinearLayout`
+  with weights rather than a fixed width, so the panel keeps its proportions on
+  a 1024×600 unit and on a wider one.
+
+  Everything on the left is bound from the player's own `PlaybackState`. The
+  library on the right is paged from SQLite by tab; an empty library shows one
+  sentence and nothing else, which is the truthful state on a unit with no
+  music yet.
+
+  The `FLAC` badge on the artwork in the design is reproduced as a real codec
+  tag: it is filled from the track's own MIME type and hidden when the track
+  carries none, rather than printed unconditionally.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/musicRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:background="@drawable/bg_screen">
+
+    <!-- §4: no launcher status row on Music. The TS8 vendor bar already shows
+         clock, date, battery and the radios, and this screen drew a second copy
+         of all six. The root now starts at the vendor bar's edge and the
+         content is inset by @dimen/vendor_bar_inset so it is not hidden under
+         it; the inset is the one measurement that cannot be taken from this
+         sandbox and is called out in the device checklist. -->
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/screen_pad"
+        android:paddingEnd="@dimen/screen_pad"
+        android:paddingTop="@dimen/vendor_bar_inset"
+        android:paddingBottom="@dimen/gap_small"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- ================= now playing ================= -->
+        <LinearLayout
+            android:id="@+id/nowPlayingPanel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:padding="@dimen/card_pad"
+            android:background="@drawable/bg_card">
+
+            <!-- Artwork, with the codec badge over its bottom-left corner. -->
+            <FrameLayout
+                android:id="@+id/artworkFrame"
+                android:layout_width="@dimen/music_artwork_large"
+                android:layout_height="@dimen/music_artwork_large"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/bg_card_raised">
+
+                <ImageView
+                    android:id="@+id/artwork"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/cd_music_artwork"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/artworkPlaceholder"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_nav_music"
+                    app:tint="@color/text_tertiary"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:id="@+id/codecBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|start"
+                    android:layout_margin="@dimen/gap_small"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:background="@drawable/bg_chip"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_micro"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="FLAC" />
+            </FrameLayout>
+
+            <!-- Title, progress and transport. -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/card_pad"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/trackTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_headline"
+                    android:textStyle="bold"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:text="@string/home_music_empty" />
+
+                <TextView
+                    android:id="@+id/trackSubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_body"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:text="@string/home_music_hint" />
+
+                <TextView
+                    android:id="@+id/trackMeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="@dimen/text_caption"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Album · 2021" />
+
+                <!-- A seek bar, not a read-only progress bar: the design puts
+                     the position here and the driver expects to scrub. -->
+                <SeekBar
+                    android:id="@+id/seekBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap"
+                    android:progressDrawable="@drawable/progress_music"
+                    android:thumb="@drawable/seek_thumb"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp"
+                    android:max="1000" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/positionText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/text_tertiary"
+                        android:textSize="@dimen/text_micro"
+                        android:text="00:00" />
+
+                    <TextView
+                        android:id="@+id/durationText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_tertiary"
+                        android:textSize="@dimen/text_micro"
+                        android:text="00:00" />
+                </LinearLayout>
+
+                <!-- Transport: heart, shuffle, prev, play, next, repeat. -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageButton
+                        android:id="@+id/btnFavorite"
+                        android:layout_width="@dimen/music_control_size"
+                        android:layout_height="@dimen/music_control_size"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_heart"
+                        app:tint="@color/text_secondary"
+                        android:contentDescription="@string/music_favorite" />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <ImageButton
+                        android:id="@+id/btnShuffle"
+                        android:layout_width="@dimen/music_control_size"
+                        android:layout_height="@dimen/music_control_size"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_shuffle"
+                        app:tint="@color/text_secondary"
+                        android:contentDescription="@string/music_shuffle" />
+
+                    <ImageButton
+                        android:id="@+id/btnPrevious"
+                        android:layout_width="@dimen/music_control_size"
+                        android:layout_height="@dimen/music_control_size"
+                        android:layout_marginStart="@dimen/gap_small"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_prev"
+                        app:tint="@color/text_primary"
+                        android:contentDescription="@string/music_previous" />
+
+                    <ImageButton
+                        android:id="@+id/btnPlayPause"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_marginStart="@dimen/gap_small"
+                        android:background="@drawable/bg_circle_ring"
+                        android:src="@drawable/ic_play"
+                        app:tint="@color/text_primary"
+                        android:contentDescription="@string/music_play" />
+
+                    <ImageButton
+                        android:id="@+id/btnNext"
+                        android:layout_width="@dimen/music_control_size"
+                        android:layout_height="@dimen/music_control_size"
+                        android:layout_marginStart="@dimen/gap_small"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_next"
+                        app:tint="@color/text_primary"
+                        android:contentDescription="@string/music_next" />
+
+                    <ImageButton
+                        android:id="@+id/btnRepeat"
+                        android:layout_width="@dimen/music_control_size"
+                        android:layout_height="@dimen/music_control_size"
+                        android:layout_marginStart="@dimen/gap_small"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_repeat"
+                        app:tint="@color/text_secondary"
+                        android:contentDescription="@string/music_repeat" />
+
+                    <Space
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <!-- Keeps the transport optically centred without a second
+                         heart; the queue lives on the right column. -->
+                    <View
+                        android:layout_width="@dimen/music_control_size"
+                        android:layout_height="1dp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ================= library ================= -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/gap"
+            android:orientation="vertical"
+            android:padding="@dimen/card_pad"
+            android:background="@drawable/bg_card">
+
+            <!-- One field for both catalogues (§13). An empty field leaves the
+                 four tabs as they are; typing replaces the tabbed library with
+                 two labelled groups — `Trên thiết bị` and `Trực tuyến` — so a
+                 driver can tell a USB track from a radio station without
+                 reading a badge, and never sees one list that silently mixes
+                 the two. -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/gap_small">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="@dimen/gap_small"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/text_tertiary"
+                    android:contentDescription="@null" />
+
+                <EditText
+                    android:id="@+id/musicSearch"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_search_field"
+                    android:hint="@string/music_search_hint"
+                    android:textColorHint="@color/text_tertiary"
+                    android:paddingStart="@dimen/gap_small"
+                    android:paddingEnd="@dimen/gap_small"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_body"
+                    android:singleLine="true"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:autofillHints=""
+                    android:importantForAutofill="no"
+                    tools:ignore="LabelFor" />
+            </LinearLayout>
+
+            <!-- ============================================================
+                 Source selector (§7): Trên thiết bị | USB | Trực tuyến.
+
+                 A driver who plugs a stick in should not have to work out from
+                 the song list which of it came from the stick. The three
+                 labels are the brief's own, and the row is above the tabs
+                 because it narrows what the tabs are tabs *of*.
+
+                 Nothing here is a guess about the hardware: `Trực tuyến` opens
+                 the provider list whatever is configured, and each provider
+                 that is missing its address says so with a `Thiết lập`
+                 button rather than vanishing from the list.
+                 ============================================================ -->
+            <LinearLayout
+                android:id="@+id/sourceRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/gap_small">
+
+                <TextView
+                    android:id="@+id/sourceDevice"
+                    style="@style/Text.Caption"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/gap_small"
+                    android:background="@drawable/bg_tab_pill"
+                    android:gravity="center"
+                    android:textColor="@color/music_tab_tint"
+                    android:text="@string/music_source_device" />
+
+                <TextView
+                    android:id="@+id/sourceUsb"
+                    style="@style/Text.Caption"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/gap_small"
+                    android:background="@drawable/bg_tab_pill"
+                    android:gravity="center"
+                    android:textColor="@color/music_tab_tint"
+                    android:text="@string/music_source_usb" />
+
+                <TextView
+                    android:id="@+id/sourceOnline"
+                    style="@style/Text.Caption"
+                    android:layout_width="0dp"
+                    android:layout_height="34dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_tab_pill"
+                    android:gravity="center"
+                    android:textColor="@color/music_tab_tint"
+                    android:text="@string/music_source_online" />
+            </LinearLayout>
+
+            <!-- ============================================================
+                 Library tabs.
+
+                 Each label sits in its own weighted cell and is sized to its
+                 text, so the selected pill hugs the word instead of filling a
+                 quarter of the row. The design draws the selected tab as a
+                 rounded outline around the label, not as a full-width bar.
+
+                 The cell is what takes the weight; the TextView inside wraps.
+                 Putting the weight on the TextView directly would stretch the
+                 pill across the whole cell.
+                 ============================================================ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tabPlaylist"
+                        style="@style/Text.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_tab_pill"
+                        android:gravity="center"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textColor="@color/music_tab_tint"
+                        android:text="@string/music_tab_playlist" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tabSongs"
+                        style="@style/Text.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_tab_pill"
+                        android:gravity="center"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textColor="@color/music_tab_tint"
+                        android:text="@string/music_tab_songs" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tabAlbums"
+                        style="@style/Text.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_tab_pill"
+                        android:gravity="center"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textColor="@color/music_tab_tint"
+                        android:text="@string/music_tab_albums" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/tabArtists"
+                        style="@style/Text.Caption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/bg_tab_pill"
+                        android:gravity="center"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:textColor="@color/music_tab_tint"
+                        android:text="@string/music_tab_artists" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:layout_marginTop="@dimen/gap_small">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/libraryList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:scrollbars="none" />
+
+                <LinearLayout
+                    android:id="@+id/libraryEmpty"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_nav_music"
+                        app:tint="@color/text_tertiary"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/libraryEmptyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/gap_small"
+                        android:gravity="center"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="@dimen/text_body"
+                        android:text="@string/music_empty" />
+
+                    <TextView
+                        android:id="@+id/libraryEmptyHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:gravity="center"
+                        android:textColor="@color/text_tertiary"
+                        android:textSize="@dimen/text_caption"
+                        android:text="@string/music_empty_hint" />
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/libraryLoading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/accent"
+                    android:visibility="gone" />
+
+                <!-- The provider list, shown when the driver picks `Trực
+                     tuyến` instead of a storage source. One row per provider,
+                     each with its own state and its own `Thiết lập` button.
+
+                     **Why a separate list rather than emptying the library.**
+                     Switching to `Trực tuyến` with nothing configured must show
+                     three sources naming what each needs — not an empty list
+                     that reads as "there is no online music". §7: a provider
+                     missing its configuration still shows the CTA and is never
+                     silently absent.
+
+                     **Why a LinearLayout and not a RecyclerView.** The list is
+                     fixed at the three providers this build ships; there is no
+                     recycling to do and no data set that can grow. A
+                     RecyclerView here would be an adapter, a view holder and a
+                     diff callback to render three static rows. -->
+                <LinearLayout
+                    android:id="@+id/providerList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/libraryFooter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/text_tertiary"
+                android:textSize="@dimen/text_micro"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="248 bài • 16 giờ 12 phút" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.ts8.launcher.ui.BottomNavView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

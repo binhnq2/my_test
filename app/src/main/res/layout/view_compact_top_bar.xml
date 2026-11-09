@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  The compact top overlay (§4), inflated by CompactTopBar.
+
+  A <merge> because the enclosing CompactTopBar is the ViewGroup the screen
+  constrains — the same shape as view_status_bar.xml, so replacing one with the
+  other in a layout is a one-line change in the parent.
+
+  **The weather is centred, deliberately.** It used to be the first child of a
+  horizontal row, which pinned it to the left edge — directly under the
+  maneuver card on the map screen and under nothing at all on the others. A
+  FrameLayout with `layout_gravity="center"` puts it in the middle of the strip
+  on every screen, which is where the driver asked for it and the one band no
+  screen's own controls claim.
+
+  The action row on the right is kept (empty today: the microphone and Quick
+  Settings moved to the bottom bar) so a future control lands in the corner
+  without re-laying-out the chip.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:id="@+id/overlayRow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/screen_pad"
+        android:paddingEnd="@dimen/screen_pad">
+
+        <!-- Weather. Its text is never set in XML: an XML default would be a
+             claim about the weather the app has not received. CompactTopBar
+             sets one of the three states at construction. -->
+        <TextView
+            android:id="@+id/weatherChip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingStart="@dimen/gap"
+            android:paddingEnd="@dimen/gap"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:background="@drawable/bg_chip"
+            android:gravity="center"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_body"
+            android:drawablePadding="@dimen/gap_small"
+            tools:ignore="HardcodedText"
+            android:text="" />
+
+        <!-- Reserved for controls that belong to the bar rather than a screen.
+             Empty in this build; the microphone and Quick Settings live in
+             `view_bottom_nav.xml`. -->
+        <LinearLayout
+            android:id="@+id/overlayActions"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end|center_vertical"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
+    </FrameLayout>
+</merge>

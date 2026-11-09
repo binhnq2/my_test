@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  One row in a library or settings list.
+
+  Batch 1 gave the activated row the accent-tinted border and the same gradient
+  the cards use. It was a flat raised fill, so "selected" and "focused" were
+  the same colour at the same depth and the only cue was brightness. The accent
+  border is what the @color/surface_card_border_active token exists for, and
+  this row is its first consumer.
+-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/surface_chip" />
+            <corners android:radius="@dimen/card_radius_small" />
+        </shape>
+    </item>
+    <item android:state_activated="true">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="@color/surface_raised_top"
+                android:endColor="@color/surface_raised_bottom"
+                android:type="linear" />
+            <stroke
+                android:width="@dimen/card_border"
+                android:color="@color/surface_card_border_active" />
+            <corners android:radius="@dimen/card_radius_small" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
+            <corners android:radius="@dimen/card_radius_small" />
+        </shape>
+    </item>
+</selector>

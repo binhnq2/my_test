@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Voice Model Management (§4 of the voice pilot).
+
+  Not one of the design's seven states: a maintenance screen reached from
+  Settings, holding the one thing a driver has to install by hand. Every row is
+  a value the store returned or an action this screen performs — there is no
+  row for anything the launcher cannot do.
+
+  One scrolling column, 44 dp minimum touch targets, and a status line that is
+  hidden until there is something true to say about it.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_screen">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="@dimen/gap_small"
+        android:layout_marginTop="@dimen/vendor_bar_inset"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_chevron_left"
+        app:tint="@color/text_secondary"
+        android:contentDescription="@string/generic_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/screenTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/gap_small"
+        android:layout_marginEnd="@dimen/screen_pad"
+        android:textColor="@color/text_primary"
+        android:textSize="@dimen/text_title"
+        android:fontFamily="sans-serif-medium"
+        android:text="@string/voice_model_title"
+        app:layout_constraintTop_toTopOf="@id/btnBack"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ScrollView
+        android:id="@+id/contentScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/gap_small"
+        android:layout_marginBottom="@dimen/gap_small"
+        android:paddingStart="@dimen/screen_pad"
+        android:paddingEnd="@dimen/screen_pad"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/card_pad"
+                android:background="@drawable/bg_card">
+
+                <TextView
+                    android:id="@+id/voiceModelState"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary"
+                    android:textSize="@dimen/text_body"
+                    tools:text="Mô hình: sẵn sàng" />
+
+                <TextView
+                    android:id="@+id/voiceModelDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="@dimen/text_micro"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Phiên bản: vosk-model-small-vn-0.4&#10;Dung lượng: 51.4 MB" />
+
+                <TextView
+                    android:id="@+id/voiceModelReason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/gap_small"
+                    android:textColor="@color/danger"
+                    android:textSize="@dimen/text_micro"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    tools:text="Lý do: Sai checksum: model/graph/Gr.fst" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/voiceModelActions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:orientation="horizontal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnImportZip"
+                    style="@style/Button.Ghost"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/voice_model_import_zip" />
+
+                <Button
+                    android:id="@+id/btnScan"
+                    style="@style/Button.Ghost"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/gap_small"
+                    android:layout_weight="1"
+                    android:text="@string/voice_model_scan" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/voiceModelStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:textColor="@color/text_secondary"
+                android:textSize="@dimen/text_micro"
+                android:visibility="gone"
+                tools:visibility="visible"
+                tools:text="Đang kiểm tra và cài mô hình…" />
+
+            <!-- What the last scan found, each with an Install button. Empty
+                 until a scan runs, which is why it has no placeholder row. -->
+            <LinearLayout
+                android:id="@+id/voiceModelFound"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/gap_small"
+                android:orientation="vertical" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/gap_small"
+                android:paddingEnd="@dimen/gap_small"
+                android:paddingTop="@dimen/gap_small"
+                android:paddingBottom="@dimen/gap"
+                android:textColor="@color/text_tertiary"
+                android:textSize="@dimen/text_micro"
+                android:text="@string/voice_model_hint" />
+        </LinearLayout>
+    </ScrollView>
+
+    <com.ts8.launcher.ui.BottomNavView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

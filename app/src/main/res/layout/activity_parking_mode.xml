@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Parking mode — design state 7.
+
+  A large 24-hour clock, the date, the weather for where the car is parked, and
+  the same bottom bar as every other screen.
+
+  **The background is the driver's.** `parkingBackground` shows a photograph the
+  driver picked from the device gallery (see ParkingModeActivity); with nothing
+  picked it stays `gone` and the drawn gradient in `@drawable/bg_car` is what
+  shows, so the screen never depends on an image that may not be there. The
+  ImageView fills the whole window — including the band behind the bottom bar —
+  which is what makes the bar's translucent variant readable as a bar floating
+  over a photo instead of a band cut out of it.
+
+  **The scrim is always on.** `parkingScrim` is a left-to-right black gradient
+  that gives the clock, date and weather chip a dark bed to sit on. The default
+  background is a photograph too, so a wash that only appeared for a picked
+  image would leave the date unreadable on first run; the gradient fades out
+  before the middle so the picture keeps its own contrast.
+
+  **There is no top bar here.** Parking is the one screen that must not show
+  the weather strip: it prints the weather itself, under the clock, and a strip
+  at the top would be a second copy of the same fact.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_car">
+
+    <!-- Behind everything, including the bottom bar. -->
+    <ImageView
+        android:id="@+id/parkingBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <!--
+      Legibility wash, always on. Both the default `bg_car` and a photo the
+      driver picked are photographs, so the type needs a dark bed in both cases;
+      the gradient keeps the right-hand side of the picture untouched. It sits
+      above the background and below every control, so it never dims a button.
+    -->
+    <View
+        android:id="@+id/parkingScrim"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/bg_parking_scrim"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/parkingPane"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="64dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/parkingClock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:includeFontPadding="false"
+            android:shadowColor="#80000000"
+            android:shadowDx="0"
+            android:shadowDy="2"
+            android:shadowRadius="18"
+            android:text="--:--"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/parking_clock" />
+
+        <TextView
+            android:id="@+id/parkingDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap"
+            android:paddingBottom="2dp"
+            android:shadowColor="#80000000"
+            android:shadowDx="0"
+            android:shadowDy="1"
+            android:shadowRadius="10"
+            android:textColor="@color/text_secondary"
+            android:textSize="@dimen/text_headline" />
+
+        <!-- Weather, directly under the date. Same provider and same honesty
+             rule as the top bar: a reading for the car's own coordinates, or a
+             sentence saying there is none. Never a fixed degree. -->
+        <TextView
+            android:id="@+id/parkingWeather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap_small"
+            android:background="@drawable/bg_chip"
+            android:paddingStart="@dimen/gap"
+            android:paddingTop="6dp"
+            android:paddingEnd="@dimen/gap"
+            android:paddingBottom="6dp"
+            android:shadowColor="#80000000"
+            android:shadowDx="0"
+            android:shadowDy="1"
+            android:shadowRadius="8"
+            android:text="@string/weather_loading"
+            android:textColor="@color/text_primary"
+            android:textSize="@dimen/text_title" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/gap"
+            android:text="@string/parking_message"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
+
+        <!-- The two things a stopped car is actually for.
+
+             The clock answers "how long have I been here" and nothing else, so
+             the screen used to have exactly one exit: tap the pane, land on
+             Home, then find the tab you wanted. That is three taps to reach a
+             map the driver was already looking at. These two buttons are the
+             destinations, and they are the reason this screen is worth opening
+             automatically rather than being a clock nobody asked for.
+
+             Each button owns its own tap: a `Button` is clickable, so the pane's
+             exit listener underneath never sees it. The row therefore sits
+             *inside* `parkingPane` without stealing the "tap anywhere to go
+             back" behaviour the rest of the pane still has. -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/gap"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btnParkingMap"
+                style="@style/Button.Primary"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:drawableStart="@drawable/ic_nav_map"
+                android:drawablePadding="@dimen/gap_small"
+                android:minWidth="140dp"
+                android:text="@string/parking_choice_map" />
+
+            <Button
+                android:id="@+id/btnParkingMusic"
+                style="@style/Button.Ghost"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="@dimen/gap_small"
+                android:drawableStart="@drawable/ic_nav_music"
+                android:drawablePadding="@dimen/gap_small"
+                android:minWidth="140dp"
+                android:text="@string/parking_choice_music" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--
+      §9's "music compact", with one condition the design does not draw: this
+      card is `gone` until there is actually a track, because §9 also forbids
+      Parking from starting playback by itself. An empty player card would be a
+      control the driver cannot act on; a card that appears because music is
+      *already* playing is information.
+
+      Compact shape (`musicCompact`) for the same reason the navigation screen
+      uses it: the artwork block shrinks and the secondary row drops, so the
+      card reads as a strip beside the clock rather than a second screen.
+
+      It is placed on the side and pinned to the pane, not over it, so tapping
+      the clock area still exits — the exit affordance and the card never
+      compete for the same pixels.
+    -->
+    <com.ts8.launcher.ui.MusicCardView
+        android:id="@+id/parkingMusicCard"
+        android:layout_width="@dimen/music_card_width_compact"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/parkingPane"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/parkingPane"
+        app:musicCompact="true" />
+
+    <!--
+      The whole pane is the exit target, not a small button. A driver reaching
+      back to the car should not have to find a 48 dp control on a screen whose
+      only affordance is "tap to go back".
+    -->
+    <TextView
+        android:id="@+id/parkingExitHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/gap"
+        android:visibility="gone"
+        android:background="@drawable/bg_chip"
+        android:paddingStart="@dimen/gap"
+        android:paddingTop="6dp"
+        android:paddingEnd="@dimen/gap"
+        android:paddingBottom="6dp"
+        android:text="@string/parking_tap_to_exit"
+        android:textColor="@color/text_tertiary"
+        android:textSize="@dimen/text_caption"
+        app:layout_constraintBottom_toTopOf="@id/bottomNav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!--
+      Background controls, top-right where the vendor bar's own icons are not.
+      Two 44 dp circles in the app's standard control style: one opens the
+      gallery, one returns to the drawn default and is only visible while a
+      photo is actually in use. Declared after the pane so they win the touch
+      against the pane's "tap anywhere to leave".
+    -->
+    <LinearLayout
+        android:id="@+id/parkingTools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/gap"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btnParkingBackground"
+            android:layout_width="@dimen/map_control_size"
+            android:layout_height="@dimen/map_control_size"
+            android:background="@drawable/bg_circle_control"
+            android:contentDescription="@string/parking_background_pick"
+            android:src="@drawable/ic_image"
+            app:tint="@color/text_primary" />
+
+        <ImageButton
+            android:id="@+id/btnParkingBackgroundClear"
+            android:layout_width="@dimen/map_control_size"
+            android:layout_height="@dimen/map_control_size"
+            android:layout_marginStart="@dimen/gap_small"
+            android:background="@drawable/bg_circle_control"
+            android:contentDescription="@string/parking_background_clear"
+            android:src="@drawable/ic_close"
+            android:visibility="gone"
+            app:tint="@color/text_primary" />
+    </LinearLayout>
+
+    <com.ts8.launcher.ui.BottomNavView
+        android:id="@+id/bottomNav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

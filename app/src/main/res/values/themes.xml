@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Ts8Launcher" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/accent</item>
+        <item name="colorPrimaryDark">@color/bg_root</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="android:windowBackground">@color/bg_root</item>
+        <item name="android:colorBackground">@color/bg_root</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <!-- Applied by Activities rendered over the map: no system bars at all,
+         the launcher draws its own status row as the design does. -->
+    <style name="Theme.Ts8Launcher.Fullscreen">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="Text.Title" parent="">
+        <item name="android:textSize">@dimen/text_title</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Text.Body" parent="">
+        <item name="android:textSize">@dimen/text_body</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="Text.Caption" parent="">
+        <item name="android:textSize">@dimen/text_caption</item>
+        <item name="android:textColor">@color/text_tertiary</item>
+    </style>
+
+    <style name="Card.Surface" parent="">
+        <item name="android:background">@drawable/bg_card</item>
+        <item name="android:padding">@dimen/card_pad</item>
+    </style>
+
+    <style name="Button.Primary" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/bg_button_primary</item>
+        <item name="android:textColor">@color/text_on_accent</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:textSize">@dimen/text_body</item>
+    </style>
+
+    <style name="Button.Ghost" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/bg_button_ghost</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:minHeight">48dp</item>
+        <item name="android:paddingStart">20dp</item>
+        <item name="android:paddingEnd">20dp</item>
+        <item name="android:textSize">@dimen/text_body</item>
+    </style>
+
+    <!-- ==================================================================
+         Bottom navigation items.
+
+         One item is icon-over-label, weight 1, with a 48dp minimum touch
+         target and the selected state expressed as a tint change plus the
+         accent label. Selected state is applied in code with
+         `isSelected = true`, which the drawable selector and the colour
+         selector both read.
+         ================================================================== -->
+    <style name="BottomNavItem">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">center</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="BottomNavIcon">
+        <item name="android:layout_width">@dimen/bottom_nav_icon</item>
+        <item name="android:layout_height">@dimen/bottom_nav_icon</item>
+        <!-- `tint` (no `android:` prefix) is AppCompat's own attribute: the
+             platform attribute only exists from API 21 for some widgets and
+             cannot be changed by a selector on a plain `ImageView` before
+             AppCompat's view inflater rewrites it. The selectable state is what
+             the bar relies on, so this has to be the AppCompat one. -->
+        <item name="tint">@color/nav_item_tint</item>
+    </style>
+
+    <style name="BottomNavLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">2dp</item>
+        <item name="android:textSize">@dimen/bottom_nav_label</item>
+        <item name="android:textColor">@color/nav_item_tint</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <!-- ==================================================================
+         Quick settings tiles.
+
+         A tile is icon-over-value-over-label, weight 1, in a row that is
+         exactly as wide as the panel. The label is the thing being toggled
+         ("Wi-Fi"); the value line is its state ("Bật" / "Tắt") and is filled
+         from the platform, never from an assumption.
+         ================================================================== -->
+    <style name="QsTile">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/qs_tile_height</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">@dimen/gap</item>
+        <item name="android:paddingEnd">@dimen/gap</item>
+        <item name="android:background">@drawable/bg_card_raised</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="QsTileIcon">
+        <item name="android:layout_width">26dp</item>
+        <item name="android:layout_height">26dp</item>
+        <item name="tint">@color/text_secondary</item>
+    </style>
+
+</resources>
