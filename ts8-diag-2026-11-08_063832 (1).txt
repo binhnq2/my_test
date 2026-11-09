@@ -1,0 +1,437 @@
+[18:28:21.967] === TS8 Launcher diagnostic log ===
+[18:28:21.969] Device: SPRD SP9832A
+[18:28:21.970] Android: 6.0 (SDK 23)
+[18:28:21.987] ABIs: armeabi-v7a, armeabi
+[18:28:21.988] App: com.ts8.launcher
+[18:28:21.998] Ts8LauncherApp.onCreate
+[18:28:26.272] MapHost.create: loading pack
+[18:28:26.430] MapHost: pack OK: Đà Nẵng & Quảng Nam, dir=/storage/emulated/0/ts8/map-pack/danang_quangnam
+[18:28:26.431] MapHost: tiles=/storage/emulated/0/ts8/map-pack/danang_quangnam/basemap.mbtiles
+[18:28:26.436] MapHost: packGlyphs=/storage/emulated/0/ts8/map-pack/danang_quangnam/fonts
+[18:28:26.578] MapHost: stagedFonts=/data/user/0/com.ts8.launcher/files/fonts
+[18:28:26.580] MapHost: bounds=GeoBounds(west=107.0, south=14.8, east=108.8, north=16.3), zoom=6.0-14.0
+[18:28:28.033] MapCtrl: attach() called, calling getMapAsync...
+[18:28:42.389] ERROR: MapCtrl: getMapAsync TIMEOUT — onMapReady never fired in 15s
+[18:28:42.391] MapCtrl: GL surface did not initialise on this device.
+[18:28:42.392] MapCtrl: This is a firmware/ROM limitation, not a pack issue.
+[18:28:42.393] ERROR: MapCtrl: FAIL — Không khởi tạo được bản đồ trên thiết bị này. Có thể phần cứng không hỗ trợ OpenGL yêu cầu.
+[18:28:42.394] ERROR: MapHost: style load FAILED: Không khởi tạo được bản đồ trên thiết bị này. Có thể phần cứng không hỗ trợ OpenGL yêu cầu.
+[18:29:28.848] ERROR: UNCAUGHT EXCEPTION on main: IndexOutOfBoundsException: index=1 count=0
+java.lang.IndexOutOfBoundsException: index=1 count=0
+	at android.view.ViewGroup.addInArray(ViewGroup.java:4422)
+	at android.view.ViewGroup.addViewInner(ViewGroup.java:4343)
+	at android.view.ViewGroup.addView(ViewGroup.java:4157)
+	at com.ts8.launcher.ui.HomeActivity.rebuildMap(HomeActivity.kt:774)
+	at com.ts8.launcher.ui.HomeActivity.access$rebuildMap(HomeActivity.kt:60)
+	at com.ts8.launcher.ui.HomeActivity$onCreate$1.invoke(HomeActivity.kt:313)
+	at com.ts8.launcher.ui.HomeActivity$onCreate$1.invoke(HomeActivity.kt:308)
+	at com.ts8.launcher.ui.MapPhaseSurface._init_$lambda$0(MapPhaseSurface.kt:58)
+	at com.ts8.launcher.ui.MapPhaseSurface.$r8$lambda$LlRKy9HPFK_g1smu2jxDgsnU3jg(MapPhaseSurface.kt)
+	at com.ts8.launcher.ui.MapPhaseSurface$$ExternalSyntheticLambda0.onClick(D8$$SyntheticClass:0)
+	at android.view.View.performClick(View.java:5205)
+	at android.view.View$PerformClick.run(View.java:21166)
+	at android.os.Handler.handleCallback(Handler.java:739)
+	at android.os.Handler.dispatchMessage(Handler.java:95)
+	at android.os.Looper.loop(Looper.java:148)
+	at android.app.ActivityThread.main(ActivityThread.java:5491)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:787)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:677)
+
+[18:29:30.639] === TS8 Launcher diagnostic log ===
+[18:29:30.643] Device: SPRD SP9832A
+[18:29:30.645] Android: 6.0 (SDK 23)
+[18:29:30.690] ABIs: armeabi-v7a, armeabi
+[18:29:30.701] App: com.ts8.launcher
+[18:29:30.703] Ts8LauncherApp.onCreate
+[18:29:34.145] MapHost.create: loading pack
+[18:29:34.231] MapHost: pack OK: Đà Nẵng & Quảng Nam, dir=/storage/emulated/0/TS8/map-pack/danang_quangnam
+[18:29:34.233] MapHost: tiles=/storage/emulated/0/TS8/map-pack/danang_quangnam/basemap.mbtiles
+[18:29:34.236] MapHost: packGlyphs=/storage/emulated/0/TS8/map-pack/danang_quangnam/fonts
+[18:29:34.269] MapHost: stagedFonts=/data/user/0/com.ts8.launcher/files/fonts
+[18:29:34.272] MapHost: bounds=GeoBounds(west=107.0, south=14.8, east=108.8, north=16.3), zoom=6.0-14.0
+[18:29:34.573] MapCtrl: attach() called, calling getMapAsync...
+[18:29:44.897] VoiceInstant: start() called interactionActive=false
+[18:29:45.357] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:29:45.360] Router: begin policy=AUTO modelReady=false offlineUsable=false systemUsable=false
+[18:29:45.361] Router: AUTO, neither ready -> startOfflineOrReport
+[18:29:45.363] VoiceInstant: onError error=SERVICE_UNAVAILABLE detail=no system recogniser, no model listeningForAnswer=false
+[18:29:45.372] VoiceInstant: no provider could open session (active=null)
+[18:29:53.264] ERROR: MapCtrl: getMapAsync TIMEOUT — onMapReady never fired in 15s
+[18:29:53.265] MapCtrl: GL surface did not initialise on this device.
+[18:29:53.265] MapCtrl: This is a firmware/ROM limitation, not a pack issue.
+[18:29:53.266] ERROR: MapCtrl: FAIL — Không khởi tạo được bản đồ trên thiết bị này. Có thể phần cứng không hỗ trợ OpenGL yêu cầu.
+[18:29:53.267] ERROR: MapHost: style load FAILED: Không khởi tạo được bản đồ trên thiết bị này. Có thể phần cứng không hỗ trợ OpenGL yêu cầu.
+[18:29:53.843] VoiceModel.revalidate: calling store.refresh()
+[18:29:56.039] VoiceModel.revalidate: state=READY
+[18:29:56.040] VoiceModel.revalidate: dir=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:30:03.458] VoiceInstant: start() called interactionActive=false
+[18:30:03.844] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:30:03.845] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:30:03.846] Router: AUTO, model READY -> startOffline (skip system)
+[18:30:03.846] Router: startOffline calling offline.start...
+[18:30:03.847] VoskProvider: start() called session=false
+[18:30:03.849] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:30:03.850] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:30:03.852] Router: offline.start returned started=true
+[18:30:03.853] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:30:03.854] VoiceInstant: session opened, active=vosk
+[18:30:03.865] VoskSession: openMicrophone OK, preparing engine...
+[18:30:08.228] VoskSession: prepareEngine OK, starting capture loop
+[18:30:10.774] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:30:10.775] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:30:10.776] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:30:10.778] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:32:55.084] ERROR: UNCAUGHT EXCEPTION on main: IndexOutOfBoundsException: index=1 count=0
+java.lang.IndexOutOfBoundsException: index=1 count=0
+	at android.view.ViewGroup.addInArray(ViewGroup.java:4422)
+	at android.view.ViewGroup.addViewInner(ViewGroup.java:4343)
+	at android.view.ViewGroup.addView(ViewGroup.java:4157)
+	at com.ts8.launcher.ui.HomeActivity.rebuildMap(HomeActivity.kt:774)
+	at com.ts8.launcher.ui.HomeActivity.access$rebuildMap(HomeActivity.kt:60)
+	at com.ts8.launcher.ui.HomeActivity$onCreate$1.invoke(HomeActivity.kt:313)
+	at com.ts8.launcher.ui.HomeActivity$onCreate$1.invoke(HomeActivity.kt:308)
+	at com.ts8.launcher.ui.MapPhaseSurface._init_$lambda$0(MapPhaseSurface.kt:58)
+	at com.ts8.launcher.ui.MapPhaseSurface.$r8$lambda$LlRKy9HPFK_g1smu2jxDgsnU3jg(MapPhaseSurface.kt)
+	at com.ts8.launcher.ui.MapPhaseSurface$$ExternalSyntheticLambda0.onClick(D8$$SyntheticClass:0)
+	at android.view.View.performClick(View.java:5205)
+	at android.view.View$PerformClick.run(View.java:21166)
+	at android.os.Handler.handleCallback(Handler.java:739)
+	at android.os.Handler.dispatchMessage(Handler.java:95)
+	at android.os.Looper.loop(Looper.java:148)
+	at android.app.ActivityThread.main(ActivityThread.java:5491)
+	at java.lang.reflect.Method.invoke(Native Method)
+	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:787)
+	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:677)
+
+[18:33:03.925] === TS8 Launcher diagnostic log ===
+[18:33:03.928] Device: SPRD SP9832A
+[18:33:03.929] Android: 6.0 (SDK 23)
+[18:33:03.938] ABIs: armeabi-v7a, armeabi
+[18:33:03.939] App: com.ts8.launcher
+[18:33:03.940] Ts8LauncherApp.onCreate
+[18:33:04.574] MapHost.create: loading pack
+[18:33:04.608] MapHost: pack OK: Đà Nẵng & Quảng Nam, dir=/storage/emulated/0/TS8/map-pack/danang_quangnam
+[18:33:04.609] MapHost: tiles=/storage/emulated/0/TS8/map-pack/danang_quangnam/basemap.mbtiles
+[18:33:04.610] MapHost: packGlyphs=/storage/emulated/0/TS8/map-pack/danang_quangnam/fonts
+[18:33:04.630] MapHost: stagedFonts=/data/user/0/com.ts8.launcher/files/fonts
+[18:33:04.632] MapHost: bounds=GeoBounds(west=107.0, south=14.8, east=108.8, north=16.3), zoom=6.0-14.0
+[18:33:04.789] MapCtrl: attach() called, calling getMapAsync...
+[18:33:18.600] VoiceInstant: start() called interactionActive=false
+[18:33:18.972] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:33:18.974] Router: begin policy=AUTO modelReady=false offlineUsable=false systemUsable=false
+[18:33:18.975] Router: AUTO, neither ready -> startOfflineOrReport
+[18:33:18.976] VoiceInstant: onError error=SERVICE_UNAVAILABLE detail=no system recogniser, no model listeningForAnswer=false
+[18:33:19.009] VoiceInstant: no provider could open session (active=null)
+[18:33:22.636] ERROR: MapCtrl: getMapAsync TIMEOUT — onMapReady never fired in 15s
+[18:33:22.637] MapCtrl: GL surface did not initialise on this device.
+[18:33:22.638] MapCtrl: This is a firmware/ROM limitation, not a pack issue.
+[18:33:22.638] ERROR: MapCtrl: FAIL — Không khởi tạo được bản đồ trên thiết bị này. Có thể phần cứng không hỗ trợ OpenGL yêu cầu.
+[18:33:22.639] ERROR: MapHost: style load FAILED: Không khởi tạo được bản đồ trên thiết bị này. Có thể phần cứng không hỗ trợ OpenGL yêu cầu.
+[18:33:25.644] VoiceModel.revalidate: calling store.refresh()
+[18:33:27.528] VoiceModel.revalidate: state=READY
+[18:33:27.529] VoiceModel.revalidate: dir=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:33:35.427] VoiceInstant: start() called interactionActive=false
+[18:33:35.766] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:33:35.767] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:33:35.768] Router: AUTO, model READY -> startOffline (skip system)
+[18:33:35.768] Router: startOffline calling offline.start...
+[18:33:35.769] VoskProvider: start() called session=false
+[18:33:35.770] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:33:35.771] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:33:35.773] Router: offline.start returned started=true
+[18:33:35.773] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:33:35.774] VoiceInstant: session opened, active=vosk
+[18:33:35.782] VoskSession: openMicrophone OK, preparing engine...
+[18:33:39.964] VoskSession: prepareEngine OK, starting capture loop
+[18:33:42.496] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:33:42.497] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:33:42.499] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:33:42.500] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:34:00.158] VoiceInstant: start() called interactionActive=false
+[18:34:00.509] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:34:00.510] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:34:00.511] Router: AUTO, model READY -> startOffline (skip system)
+[18:34:00.511] Router: startOffline calling offline.start...
+[18:34:00.512] VoskProvider: start() called session=false
+[18:34:00.513] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:00.514] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:00.514] Router: offline.start returned started=true
+[18:34:00.515] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:00.516] VoiceInstant: session opened, active=vosk
+[18:34:00.524] VoskSession: openMicrophone OK, preparing engine...
+[18:34:00.900] VoskSession: prepareEngine OK, starting capture loop
+[18:34:03.623] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:34:03.624] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:34:03.625] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:34:03.626] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:34:17.897] VoiceInstant: start() called interactionActive=false
+[18:34:18.290] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:34:18.291] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:34:18.292] Router: AUTO, model READY -> startOffline (skip system)
+[18:34:18.293] Router: startOffline calling offline.start...
+[18:34:18.293] VoskProvider: start() called session=false
+[18:34:18.294] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:18.295] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:18.296] Router: offline.start returned started=true
+[18:34:18.297] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:18.297] VoiceInstant: session opened, active=vosk
+[18:34:18.306] VoskSession: openMicrophone OK, preparing engine...
+[18:34:18.705] VoskSession: prepareEngine OK, starting capture loop
+[18:34:21.244] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:34:21.271] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:34:21.272] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:34:21.273] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:34:26.070] VoiceInstant: start() called interactionActive=true
+[18:34:29.452] VoiceInstant: start() called interactionActive=false
+[18:34:29.807] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:34:29.808] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:34:29.809] Router: AUTO, model READY -> startOffline (skip system)
+[18:34:29.811] Router: startOffline calling offline.start...
+[18:34:29.812] VoskProvider: start() called session=false
+[18:34:29.813] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:29.813] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:29.814] Router: offline.start returned started=true
+[18:34:29.815] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:29.815] VoiceInstant: session opened, active=vosk
+[18:34:29.823] VoskSession: openMicrophone OK, preparing engine...
+[18:34:30.187] VoskSession: prepareEngine OK, starting capture loop
+[18:34:32.808] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:34:32.810] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:34:32.811] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:34:32.813] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:34:40.245] VoiceInstant: start() called interactionActive=true
+[18:34:40.441] VoiceInstant: start() called interactionActive=true
+[18:34:40.599] VoiceInstant: start() called interactionActive=true
+[18:34:40.756] VoiceInstant: start() called interactionActive=true
+[18:34:40.874] VoiceInstant: start() called interactionActive=true
+[18:34:43.443] VoiceInstant: start() called interactionActive=false
+[18:34:43.798] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:34:43.799] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:34:43.800] Router: AUTO, model READY -> startOffline (skip system)
+[18:34:43.800] Router: startOffline calling offline.start...
+[18:34:43.801] VoskProvider: start() called session=false
+[18:34:43.802] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:43.803] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:43.803] Router: offline.start returned started=true
+[18:34:43.804] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:43.804] VoiceInstant: session opened, active=vosk
+[18:34:43.812] VoskSession: openMicrophone OK, preparing engine...
+[18:34:44.177] VoskSession: prepareEngine OK, starting capture loop
+[18:34:45.966] VoiceInstant: start() called interactionActive=true
+[18:34:46.150] VoiceInstant: start() called interactionActive=true
+[18:34:46.333] VoiceInstant: start() called interactionActive=true
+[18:34:46.722] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:34:46.724] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:34:46.724] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:34:46.725] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:34:46.818] VoiceInstant: start() called interactionActive=true
+[18:34:54.374] VoiceInstant: start() called interactionActive=true
+[18:34:54.531] VoiceInstant: start() called interactionActive=true
+[18:34:58.049] VoiceInstant: start() called interactionActive=false
+[18:34:58.389] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:34:58.390] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:34:58.391] Router: AUTO, model READY -> startOffline (skip system)
+[18:34:58.391] Router: startOffline calling offline.start...
+[18:34:58.392] VoskProvider: start() called session=false
+[18:34:58.393] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:58.393] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:58.394] Router: offline.start returned started=true
+[18:34:58.394] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:34:58.395] VoiceInstant: session opened, active=vosk
+[18:34:58.402] VoskSession: openMicrophone OK, preparing engine...
+[18:34:58.759] VoskSession: prepareEngine OK, starting capture loop
+[18:35:04.929] Router: onProviderFinal from=vosk hypotheses=5 confidence=259.28036
+[18:35:04.955] VoiceInstant: onFinal chosen="tới apollo" (5 hypotheses, confidence=259.28036)
+[18:35:11.750] VoiceInstant: start() called interactionActive=true
+[18:35:18.120] VoiceInstant: start() called interactionActive=false
+[18:35:18.472] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:35:18.473] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:35:18.474] Router: AUTO, model READY -> startOffline (skip system)
+[18:35:18.475] Router: startOffline calling offline.start...
+[18:35:18.475] VoskProvider: start() called session=false
+[18:35:18.476] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:18.477] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:18.478] Router: offline.start returned started=true
+[18:35:18.478] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:18.479] VoiceInstant: session opened, active=vosk
+[18:35:18.487] VoskSession: openMicrophone OK, preparing engine...
+[18:35:18.827] VoskSession: prepareEngine OK, starting capture loop
+[18:35:21.361] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:35:21.362] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:35:21.362] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:35:21.363] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:35:22.138] VoiceInstant: start() called interactionActive=true
+[18:35:22.426] VoiceInstant: start() called interactionActive=true
+[18:35:22.649] VoiceInstant: start() called interactionActive=true
+[18:35:22.846] VoiceInstant: start() called interactionActive=true
+[18:35:23.043] VoiceInstant: start() called interactionActive=true
+[18:35:23.227] VoiceInstant: start() called interactionActive=true
+[18:35:23.410] VoiceInstant: start() called interactionActive=true
+[18:35:23.581] VoiceInstant: start() called interactionActive=true
+[18:35:27.728] VoiceInstant: start() called interactionActive=false
+[18:35:28.068] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:35:28.069] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:35:28.069] Router: AUTO, model READY -> startOffline (skip system)
+[18:35:28.070] Router: startOffline calling offline.start...
+[18:35:28.070] VoskProvider: start() called session=false
+[18:35:28.071] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:28.072] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:28.072] Router: offline.start returned started=true
+[18:35:28.073] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:28.073] VoiceInstant: session opened, active=vosk
+[18:35:28.081] VoskSession: openMicrophone OK, preparing engine...
+[18:35:28.492] VoskSession: prepareEngine OK, starting capture loop
+[18:35:31.099] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:35:31.100] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:35:31.101] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:35:31.102] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:35:41.654] VoiceInstant: start() called interactionActive=false
+[18:35:41.992] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:35:41.993] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:35:41.993] Router: AUTO, model READY -> startOffline (skip system)
+[18:35:41.994] Router: startOffline calling offline.start...
+[18:35:41.994] VoskProvider: start() called session=false
+[18:35:41.995] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:41.996] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:41.997] Router: offline.start returned started=true
+[18:35:41.997] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:41.998] VoiceInstant: session opened, active=vosk
+[18:35:42.005] VoskSession: openMicrophone OK, preparing engine...
+[18:35:42.360] VoskSession: prepareEngine OK, starting capture loop
+[18:35:44.903] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:35:44.905] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:35:44.905] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:35:44.906] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:35:44.940] VoiceInstant: start() called interactionActive=true
+[18:35:45.187] VoiceInstant: start() called interactionActive=true
+[18:35:46.631] VoiceInstant: start() called interactionActive=true
+[18:35:46.842] VoiceInstant: start() called interactionActive=true
+[18:35:46.985] VoiceInstant: start() called interactionActive=true
+[18:35:47.170] VoiceInstant: start() called interactionActive=true
+[18:35:47.353] VoiceInstant: start() called interactionActive=true
+[18:35:47.524] VoiceInstant: start() called interactionActive=true
+[18:35:50.043] VoiceInstant: start() called interactionActive=true
+[18:35:50.290] VoiceInstant: start() called interactionActive=true
+[18:35:50.472] VoiceInstant: start() called interactionActive=true
+[18:35:52.283] VoiceInstant: start() called interactionActive=true
+[18:35:52.491] VoiceInstant: start() called interactionActive=true
+[18:35:52.634] VoiceInstant: start() called interactionActive=true
+[18:35:55.836] VoiceInstant: start() called interactionActive=false
+[18:35:56.178] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:35:56.179] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:35:56.180] Router: AUTO, model READY -> startOffline (skip system)
+[18:35:56.180] Router: startOffline calling offline.start...
+[18:35:56.181] VoskProvider: start() called session=false
+[18:35:56.182] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:56.183] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:56.184] Router: offline.start returned started=true
+[18:35:56.184] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:35:56.185] VoiceInstant: session opened, active=vosk
+[18:35:56.192] VoskSession: openMicrophone OK, preparing engine...
+[18:35:56.228] VoiceInstant: start() called interactionActive=true
+[18:35:56.230] VoiceInstant: start() called interactionActive=true
+[18:35:56.397] VoiceInstant: start() called interactionActive=true
+[18:35:56.553] VoskSession: prepareEngine OK, starting capture loop
+[18:35:56.566] VoiceInstant: start() called interactionActive=true
+[18:35:56.970] VoiceInstant: start() called interactionActive=true
+[18:35:57.258] VoiceInstant: start() called interactionActive=true
+[18:35:57.705] VoiceInstant: start() called interactionActive=true
+[18:35:59.154] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:35:59.156] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:35:59.157] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:35:59.158] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:36:07.962] VoiceInstant: start() called interactionActive=false
+[18:36:08.310] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:36:08.313] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:36:08.314] Router: AUTO, model READY -> startOffline (skip system)
+[18:36:08.315] Router: startOffline calling offline.start...
+[18:36:08.316] VoskProvider: start() called session=false
+[18:36:08.317] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:08.318] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:08.318] Router: offline.start returned started=true
+[18:36:08.319] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:08.320] VoiceInstant: session opened, active=vosk
+[18:36:08.335] VoskSession: openMicrophone OK, preparing engine...
+[18:36:08.684] VoskSession: prepareEngine OK, starting capture loop
+[18:36:10.349] VoiceInstant: start() called interactionActive=true
+[18:36:10.752] VoiceInstant: start() called interactionActive=true
+[18:36:11.065] VoiceInstant: start() called interactionActive=true
+[18:36:11.215] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:36:11.216] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:36:11.217] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:36:11.218] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:36:11.312] VoiceInstant: start() called interactionActive=true
+[18:36:11.534] VoiceInstant: start() called interactionActive=true
+[18:36:11.742] VoiceInstant: start() called interactionActive=true
+[18:36:11.925] VoiceInstant: start() called interactionActive=true
+[18:36:12.159] VoiceInstant: start() called interactionActive=true
+[18:36:13.423] VoiceInstant: start() called interactionActive=true
+[18:36:14.935] VoiceInstant: start() called interactionActive=true
+[18:36:16.394] VoiceInstant: start() called interactionActive=true
+[18:36:17.033] VoiceInstant: start() called interactionActive=true
+[18:36:17.332] VoiceInstant: start() called interactionActive=true
+[18:36:17.567] VoiceInstant: start() called interactionActive=true
+[18:36:17.762] VoiceInstant: start() called interactionActive=true
+[18:36:17.945] VoiceInstant: start() called interactionActive=true
+[18:36:18.142] VoiceInstant: start() called interactionActive=true
+[18:36:19.704] VoiceInstant: start() called interactionActive=false
+[18:36:20.077] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:36:20.078] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:36:20.079] Router: AUTO, model READY -> startOffline (skip system)
+[18:36:20.079] Router: startOffline calling offline.start...
+[18:36:20.080] VoskProvider: start() called session=false
+[18:36:20.081] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:20.082] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:20.083] Router: offline.start returned started=true
+[18:36:20.084] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:20.085] VoiceInstant: session opened, active=vosk
+[18:36:20.104] VoskSession: openMicrophone OK, preparing engine...
+[18:36:20.488] VoskSession: prepareEngine OK, starting capture loop
+[18:36:22.101] VoiceInstant: start() called interactionActive=true
+[18:36:22.330] VoiceInstant: start() called interactionActive=true
+[18:36:22.555] VoiceInstant: start() called interactionActive=true
+[18:36:22.765] VoiceInstant: start() called interactionActive=true
+[18:36:23.122] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:36:23.124] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:36:23.125] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:36:23.127] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:36:29.108] VoiceInstant: start() called interactionActive=true
+[18:36:35.754] VoiceInstant: start() called interactionActive=false
+[18:36:36.116] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:36:36.118] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:36:36.118] Router: AUTO, model READY -> startOffline (skip system)
+[18:36:36.119] Router: startOffline calling offline.start...
+[18:36:36.119] VoskProvider: start() called session=false
+[18:36:36.121] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:36.121] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:36.122] Router: offline.start returned started=true
+[18:36:36.123] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:36.124] VoiceInstant: session opened, active=vosk
+[18:36:36.131] VoskSession: openMicrophone OK, preparing engine...
+[18:36:36.166] VoiceInstant: start() called interactionActive=true
+[18:36:36.318] VoiceInstant: start() called interactionActive=true
+[18:36:36.488] VoskSession: prepareEngine OK, starting capture loop
+[18:36:38.510] VoiceInstant: start() called interactionActive=true
+[18:36:39.024] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:36:39.026] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:36:39.028] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:36:39.029] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
+[18:36:39.467] VoiceInstant: start() called interactionActive=true
+[18:36:51.483] VoiceInstant: start() called interactionActive=false
+[18:36:51.827] VoiceInstant: creating session, grammar=present(13398 chars)
+[18:36:51.828] Router: begin policy=AUTO modelReady=true offlineUsable=true systemUsable=false
+[18:36:51.829] Router: AUTO, model READY -> startOffline (skip system)
+[18:36:51.830] Router: startOffline calling offline.start...
+[18:36:51.830] VoskProvider: start() called session=false
+[18:36:51.831] VoskProvider: activeDirectory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:51.832] VoskProvider: submitting session to worker, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:51.832] Router: offline.start returned started=true
+[18:36:51.833] VoskSession: run() started, directory=/sdcard/voice-models/vi-VN/vosk-model-small-vn-0.4
+[18:36:51.833] VoiceInstant: session opened, active=vosk
+[18:36:51.840] VoskSession: openMicrophone OK, preparing engine...
+[18:36:52.234] VoskSession: prepareEngine OK, starting capture loop
+[18:36:54.770] Router: onProviderError from=vosk error=NO_SPEECH detail=vosk: không có tiếng nói finished=false active=vosk
+[18:36:54.771] Router: fallback check: canFallback=false switches=0 allowsFallback=false
+[18:36:54.772] Router: no fallback (policy or error type), promoting error: NO_SPEECH
+[18:36:54.774] VoiceInstant: onError error=NO_SPEECH detail=provider=vosk switches=0 model=READY trail=vosk:NO_SPEECH; vosk: không có tiếng nói listeningForAnswer=false
